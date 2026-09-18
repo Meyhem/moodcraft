@@ -86,3 +86,19 @@ test('a past date can be opened and recorded', async () => {
   await userEvent.click(screen.getByRole('button', { name: 'Previous day' }))
   expect(screen.getByRole('heading', { level: 1 })).not.toHaveTextContent('')
 })
+
+test('recording a dose does not discard partially entered scores', async () => {
+  const med = await medications.add('Medication A')
+  renderScreen()
+  await waitFor(() => screen.getByText('Tiredness'))
+  const row = screen.getByRole('radiogroup', { name: 'Tiredness' })
+  await userEvent.click(within(row).getByRole('radio', { name: '3' }))
+
+  await userEvent.type(screen.getByLabelText(/dose today/i), '150')
+  await userEvent.tab()
+  await waitFor(async () => expect(await intakes.forMedication(med.id)).toHaveLength(1))
+
+  const after = screen.getByRole('radiogroup', { name: 'Tiredness' })
+  expect(within(after).getByRole('radio', { name: '3' })).toBeChecked()
+  expect(screen.getByText('1 of 13 scored — nothing is saved until all 13 are')).toBeInTheDocument()
+})

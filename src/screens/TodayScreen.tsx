@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { DateNavigator } from '../components/DateNavigator'
 import { EventChipGroup } from '../components/EventChipGroup'
 import { IntakeField } from '../components/IntakeField'
@@ -23,11 +23,18 @@ export default function TodayScreen() {
   const record = useMemo(() => data.dayRecords.find((r) => r.date === date), [data.dayRecords, date])
   const intake = useMemo(() => data.intakes.find((i) => i.date === date), [data.intakes, date])
 
+  // The form is the source of truth for the day being edited: partial scores are
+  // deliberately never persisted (R-03), so re-reading the store after an unrelated
+  // write — saving a dose reloads everything — would discard them. Load the stored
+  // day once per date instead, once the initial load has finished.
+  const hydratedDate = useRef<IsoDate | null>(null)
   useEffect(() => {
+    if (data.loading || hydratedDate.current === date) return
+    hydratedDate.current = date
     setScores(record?.scores ?? {})
     setEvents(record?.events ?? [])
     setMg(intake ? String(intake.mg) : '')
-  }, [date, record, intake])
+  }, [data.loading, date, record, intake])
 
   const scored = ITEM_IDS.filter((id) => scores[id] !== undefined).length
   const complete = scored === ITEM_IDS.length
