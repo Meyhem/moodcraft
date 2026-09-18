@@ -2,3 +2,4 @@
 .title { font-size: var(--fs-body); color: var(--text-primary); }
 .note { font-size: var(--fs-micro); line-height: var(--lh-micro); color: var(--text-tertiary); }
 .summary { font-size: var(--fs-micro); line-height: var(--lh-micro); color: var(--text-secondary); margin-top: var(--sp-1); }
+.confirmRow { display: flex; align-items: center; gap: var(--sp-2); }

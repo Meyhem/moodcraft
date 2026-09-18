@@ -22,13 +22,15 @@ function describe(summary: ImportSummary): string {
 }
 
 export function GenerateDebugDataAction({ onGenerate }: Props) {
+  const [confirming, setConfirming] = useState(false)
   const [summary, setSummary] = useState<string | null>(null)
   const [generating, setGenerating] = useState(false)
 
-  async function handleGenerate() {
+  async function handleConfirm() {
     setGenerating(true)
     setSummary(describe(await onGenerate()))
     setGenerating(false)
+    setConfirming(false)
   }
 
   return (
@@ -36,14 +38,22 @@ export function GenerateDebugDataAction({ onGenerate }: Props) {
       <div>
         <div className={styles.title}>Generate debug data</div>
         <div className={styles.note}>
-          Fills in a made-up medication with months of scores and doses, for trying out the
-          app without entering anything by hand
+          {confirming
+            ? 'Any existing day or dose that falls on the same date as the made-up data will be overwritten.'
+            : 'Fills in a made-up medication with months of scores and doses, for trying out the app without entering anything by hand'}
         </div>
         {summary !== null && <div role="status" className={styles.summary}>{summary}</div>}
       </div>
-      <Button variant="secondary" onClick={() => void handleGenerate()} disabled={generating}>
-        {generating ? 'Generating…' : 'Generate'}
-      </Button>
+      {confirming ? (
+        <div className={styles.confirmRow}>
+          <Button variant="ghost" onClick={() => setConfirming(false)} disabled={generating}>Cancel</Button>
+          <Button variant="secondary" onClick={() => void handleConfirm()} disabled={generating}>
+            {generating ? 'Generating…' : 'Yes, generate'}
+          </Button>
+        </div>
+      ) : (
+        <Button variant="secondary" onClick={() => setConfirming(true)}>Generate</Button>
+      )}
     </Card>
   )
 }
