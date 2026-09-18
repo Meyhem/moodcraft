@@ -21,6 +21,7 @@ function build(outcomes: IntakeOutcome[], baseline = { mean: 4, perItem: {}, day
     threshold: findResetThreshold(outcomes),
     bucket: bucketComparison(outcomes),
     dose: dosePreviousEffect(outcomes),
+    decayCurves: [],
     confoundedCount: outcomes.filter((o) => o.confounded).length,
   })
 }
@@ -61,6 +62,7 @@ test('without a baseline no effectiveness statement is produced, only spacing (R
     threshold: null,
     bucket: { shortMean: null, longMean: null, difference: null, sampleSize: 0 },
     dose: null,
+    decayCurves: [],
     confoundedCount: 0,
   })
   expect(statements.some((s) => s.id === 'spacing-buckets')).toBe(false)
@@ -73,8 +75,53 @@ test('with nothing recorded at all the list is a single plain statement', () => 
   const statements = buildStatements({
     outcomes: [], baseline: null, threshold: null,
     bucket: { shortMean: null, longMean: null, difference: null, sampleSize: 0 },
-    dose: null, confoundedCount: 0,
+    dose: null, decayCurves: [], confoundedCount: 0,
   })
   expect(statements).toHaveLength(1)
   expect(statements[0]!.text).toBe('No doses have been recorded yet.')
+})
+
+test('the best-dose-duration statement names the bucket with the highest day-0 improvement and how much held by day 3', () => {
+  const decayCurves = [
+    {
+      bucket: { label: '50 mg', minMg: 50, maxMg: 50, doseCount: 4 },
+      points: [
+        { dayOffset: 0, meanImprovement: 0.8, sampleSize: 4, thin: true },
+        { dayOffset: 1, meanImprovement: 0.5, sampleSize: 4, thin: true },
+        { dayOffset: 2, meanImprovement: 0.3, sampleSize: 3, thin: true },
+        { dayOffset: 3, meanImprovement: 0.1, sampleSize: 2, thin: true },
+      ],
+    },
+    {
+      bucket: { label: '100 mg', minMg: 100, maxMg: 100, doseCount: 6 },
+      points: [
+        { dayOffset: 0, meanImprovement: 1.8, sampleSize: 6, thin: true },
+        { dayOffset: 1, meanImprovement: 1.5, sampleSize: 6, thin: true },
+        { dayOffset: 2, meanImprovement: 1.2, sampleSize: 5, thin: true },
+        { dayOffset: 3, meanImprovement: 1.2, sampleSize: 4, thin: true },
+      ],
+    },
+  ]
+  const statement = build(many).find((s) => s.id === 'best-dose-duration')
+  expect(statement).toBeUndefined() // `many` was built with decayCurves: [] via `build`
+
+  const statements = buildStatements({
+    outcomes: many,
+    baseline: { mean: 4, perItem: {}, dayCount: 12, from: '2026-06-01', to: '2026-06-12' } as never,
+    threshold: findResetThreshold(many),
+    bucket: bucketComparison(many),
+    dose: dosePreviousEffect(many),
+    decayCurves,
+    confoundedCount: 0,
+  })
+  const best = statements.find((s) => s.id === 'best-dose-duration')
+  expect(best!.text).toBe(
+    'The 100 mg doses had the best initial improvement (1.8), and still held 1.2 of that by day 3.',
+  )
+  expect(best!.sampleSize).toBe(6)
+})
+
+test('with no decay curves the best-dose-duration statement is omitted', () => {
+  const statements = build(many)
+  expect(statements.some((s) => s.id === 'best-dose-duration')).toBe(false)
 })

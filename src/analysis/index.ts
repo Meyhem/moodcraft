@@ -1,4 +1,6 @@
 export { runAnalysis } from './run'
 export { composite, meanComposite, perItem } from './composite'
+export { buildDoseBuckets, computeDecayCurves } from './duration'
 export { responseWindow, withGaps } from './gaps'
 export * from './types'
+export type { DecayCurve, DecayPoint, DoseBucket } from './duration'

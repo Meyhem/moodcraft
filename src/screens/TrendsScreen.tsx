@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { DoseDecayChart } from '../components/DoseDecayChart'
 import { GapScatter } from '../components/GapScatter'
 import { PatternStatementCard } from '../components/PatternStatementCard'
 import { TrendChart } from '../components/TrendChart'
@@ -44,6 +45,8 @@ export default function TrendsScreen() {
           windowFrom={from}
           resetThresholdDays={analysis.resetThresholdDays}
         />
+        <SectionTitle>Dose size vs. how long it lasted</SectionTitle>
+        <DoseDecayChart curves={analysis.decayCurves} />
       </div>
 
       <section className={styles.statements} aria-label="Patterns">

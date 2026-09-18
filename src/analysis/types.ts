@@ -1,3 +1,4 @@
+import type { DecayCurve } from './duration'
 import type { DayRecord, Intake, IsoDate, ItemId } from '../domain/types'
 
 export interface Baseline {
@@ -47,6 +48,8 @@ export interface AnalysisResult {
   /** every outcome ever computed, ignoring the recent/long-term window (for charts that show full history) */
   allOutcomes: IntakeOutcome[]
   resetThresholdDays: number | null
+  /** per dose-size bucket, over full history — independent of the recent/long-term window (R-21) */
+  decayCurves: DecayCurve[]
   statements: Statement[]
 }
 

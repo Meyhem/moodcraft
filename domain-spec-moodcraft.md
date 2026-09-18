@@ -121,6 +121,12 @@ Not stored, but the most important derived thing in the domain: the number of da
 an intake and the one before it. Blunting, reset, breaks, and the whole spacing analysis
 are expressed in gaps.
 
+### 4.7 Dose bucket
+Not stored, but derived for the duration-of-effect analysis: intakes grouped by mg amount
+so their outcomes can be compared. Buckets are derived from the recorded mg values
+themselves — never a configured threshold — so the app still holds no configured knowledge
+about the medication (R-15).
+
 ---
 
 ## 5. Relationships
@@ -197,6 +203,7 @@ reconstructed.
 - **R-15** *(hard)* — The app holds no configured knowledge about any medication. Onset, duration, spacing and expected effects are all inferred.
 - **R-16** *(soft)* — Every pattern statement is shown, however thin the data, but thin data is **visibly marked** — e.g. "based on 4 intakes".
 - **R-17** *(hard)* — Analysis reports over **multiple time windows at once**: recent days weighted most heavily, alongside a long-term view of whether things are improving overall.
+- **R-21** *(hard)* — Duration of effect is measured per **dose bucket** (§4.7), where buckets are derived from the recorded mg values, never a configured threshold. A day only counts toward a dose's decay curve if no later intake has occurred by that day, so no day is ever attributed to more than one dose.
 
 **Data and privacy**
 

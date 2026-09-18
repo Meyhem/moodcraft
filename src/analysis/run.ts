@@ -1,5 +1,6 @@
 import { addDays } from '../domain/date'
 import { computeBaseline } from './baseline'
+import { computeDecayCurves } from './duration'
 import { computeOutcomes } from './improvement'
 import { buildStatements } from './statements'
 import { bucketComparison, dosePreviousEffect, findResetThreshold } from './threshold'
@@ -19,6 +20,7 @@ export function runAnalysis(input: AnalysisInput, window: WindowKey): AnalysisRe
   const bucket = bucketComparison(outcomes)
   const threshold = findResetThreshold(outcomes)
   const dose = dosePreviousEffect(outcomes)
+  const decayCurves = computeDecayCurves(intakes, dayRecords, baseline)
 
   return {
     medicationId,
@@ -28,12 +30,14 @@ export function runAnalysis(input: AnalysisInput, window: WindowKey): AnalysisRe
     outcomes,
     allOutcomes: all,
     resetThresholdDays: threshold?.days ?? null,
+    decayCurves,
     statements: buildStatements({
       outcomes,
       baseline,
       threshold,
       bucket,
       dose,
+      decayCurves,
       confoundedCount: outcomes.filter((o) => o.confounded).length,
     }),
   }

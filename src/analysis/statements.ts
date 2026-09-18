@@ -1,4 +1,5 @@
-import { LONG_GAP_MIN, SHORT_GAP_MAX, THIN_SAMPLE } from './types'
+import type { DecayCurve } from './duration'
+import { LONG_GAP_MIN, RESPONSE_WINDOW_DAYS, SHORT_GAP_MAX, THIN_SAMPLE } from './types'
 import type { Baseline, IntakeOutcome, Statement } from './types'
 
 interface Bucket { shortMean: number | null; longMean: number | null; difference: number | null; sampleSize: number }
@@ -9,6 +10,7 @@ export interface StatementInput {
   threshold: { days: number; difference: number; sampleSize: number } | null
   bucket: Bucket
   dose: { correlation: number; sampleSize: number } | null
+  decayCurves: DecayCurve[]
   confoundedCount: number
 }
 
@@ -19,7 +21,7 @@ function statement(id: string, text: string, emphasis: string[], sampleSize: num
 }
 
 export function buildStatements(input: StatementInput): Statement[] {
-  const { outcomes, baseline, threshold, bucket, dose, confoundedCount } = input
+  const { outcomes, baseline, threshold, bucket, dose, decayCurves, confoundedCount } = input
   if (outcomes.length === 0) {
     return [statement('no-intakes', 'No doses have been recorded yet.', [], 0)]
   }
@@ -70,6 +72,43 @@ export function buildStatements(input: StatementInput): Statement[] {
         dose.sampleSize,
       ),
     )
+  }
+
+  const bestCurve = decayCurves
+    .filter((c) => c.points[0]!.meanImprovement !== null)
+    .reduce<DecayCurve | null>(
+      (best, curve) =>
+        best === null || curve.points[0]!.meanImprovement! > best.points[0]!.meanImprovement!
+          ? curve
+          : best,
+      null,
+    )
+
+  if (bestCurve !== null) {
+    const day0 = bestCurve.points[0]!
+    const laterPoint = bestCurve.points[RESPONSE_WINDOW_DAYS] ?? null
+    const peak = round1(day0.meanImprovement!)
+    if (laterPoint !== null && laterPoint.meanImprovement !== null) {
+      out.push(
+        statement(
+          'best-dose-duration',
+          `The ${bestCurve.bucket.label} doses had the best initial improvement (${peak}), and still held ${round1(
+            laterPoint.meanImprovement,
+          )} of that by day ${RESPONSE_WINDOW_DAYS}.`,
+          [bestCurve.bucket.label, peak],
+          day0.sampleSize,
+        ),
+      )
+    } else {
+      out.push(
+        statement(
+          'best-dose-duration',
+          `The ${bestCurve.bucket.label} doses had the best initial improvement (${peak}).`,
+          [bestCurve.bucket.label, peak],
+          day0.sampleSize,
+        ),
+      )
+    }
   }
 
   if (baseline !== null) {
