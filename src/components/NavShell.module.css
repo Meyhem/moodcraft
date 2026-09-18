@@ -20,5 +20,5 @@
     border-radius: var(--radius-control); font-size: var(--fs-body);
   }
   .link[aria-current='page'] { background: var(--accent-muted); color: var(--accent); }
-  .content { padding: var(--sp-6) var(--sp-8); }
+  .content { padding: var(--sp-6) var(--sp-8); max-width: 1040px; }
 }
