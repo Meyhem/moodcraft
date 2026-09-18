@@ -1,0 +1,18 @@
+.wrap { position: relative; display: inline-flex; }
+.button {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 1px solid var(--border-default); background: var(--bg-overlay);
+  color: var(--text-tertiary); font-size: var(--fs-micro); font-weight: 700;
+  line-height: 1; cursor: pointer; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.button:hover, .button[aria-expanded='true'] { color: var(--accent); border-color: var(--accent); }
+
+.popover {
+  position: absolute; top: calc(100% + 6px); right: 0; z-index: 10;
+  width: min(260px, 80vw);
+  background: var(--bg-overlay); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-control); padding: var(--sp-3);
+  font-size: var(--fs-label); line-height: var(--lh-label); color: var(--text-secondary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}

@@ -42,7 +42,7 @@ test('the chart is labelled and lists its marks in text for assistive tech', () 
     />,
   )
   expect(screen.getByRole('img', { name: /scores from/i })).toBeInTheDocument()
-  expect(screen.getByText(/150 mg/)).toBeInTheDocument()
+  expect(screen.getByRole('img', { name: /150 mg/i })).toBeInTheDocument()
 })
 
 test('with nothing recorded the chart says so rather than drawing an empty grid', () => {

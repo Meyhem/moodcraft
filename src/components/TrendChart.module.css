@@ -1,8 +1,8 @@
-.wrap { width: 100%; }
+.wrap { width: 100%; position: relative; }
 .svg { width: 100%; height: auto; display: block; }
+.help { position: absolute; top: 0; right: 0; z-index: 1; }
 .legend { display: flex; flex-wrap: wrap; gap: var(--sp-5); margin-top: var(--sp-3); }
 .legendItem { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-micro); color: var(--text-tertiary); }
 .key { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
 .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
 .empty { color: var(--text-tertiary); font-size: var(--fs-body); text-align: center; padding: var(--sp-8) 0; }
-.caption { font-size: var(--fs-micro); color: var(--text-tertiary); }
