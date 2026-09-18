@@ -66,6 +66,19 @@ Wire into `run.ts`: add `decayCurves: DecayCurve[]` to `AnalysisResult`, compute
 full history (like `allOutcomes`) so the window toggle doesn't affect bucket membership
 (consistent with the bucket note above).
 
+### Amendment: confounded days (added after initial implementation)
+
+The initial version omitted R-13 — a day carrying a logged event that happened to land in a
+dose's decay window was averaged in with no indication, unlike `GapScatter` and the
+statements pipeline which both surface confounding. `DecayPoint` gained a
+`confoundedCount: number` — how many of that point's contributing days had an event. The
+day is still included in `meanImprovement` and `sampleSize` (noted, not excluded, same
+policy as `isConfounded`/`splitByConfounding` elsewhere) — dropping it would mean silently
+discarding recorded data, which the app avoids by design (R-16's spirit applied to R-13).
+`DoseDecayChart` draws a dashed ring around any point with `confoundedCount > 0` (mirroring
+`GapScatter`'s open-ring idiom for confounded points) and names the count in both the
+tooltip and the accessible description.
+
 ## Statement: `src/analysis/statements.ts`
 
 One new descriptive statement, added only when at least one bucket has a non-null

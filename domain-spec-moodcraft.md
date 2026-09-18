@@ -203,7 +203,7 @@ reconstructed.
 - **R-15** *(hard)* — The app holds no configured knowledge about any medication. Onset, duration, spacing and expected effects are all inferred.
 - **R-16** *(soft)* — Every pattern statement is shown, however thin the data, but thin data is **visibly marked** — e.g. "based on 4 intakes".
 - **R-17** *(hard)* — Analysis reports over **multiple time windows at once**: recent days weighted most heavily, alongside a long-term view of whether things are improving overall.
-- **R-21** *(hard)* — Duration of effect is measured per **dose bucket** (§4.7), where buckets are derived from the recorded mg values, never a configured threshold. A day only counts toward a dose's decay curve if no later intake has occurred by that day, so no day is ever attributed to more than one dose.
+- **R-21** *(hard)* — Duration of effect is measured per **dose bucket** (§4.7), where buckets are derived from the recorded mg values, never a configured threshold. A day only counts toward a dose's decay curve if no later intake has occurred by that day, so no day is ever attributed to more than one dose. Per R-13, a day carrying a logged event still counts toward the curve — it is noted as confounded, never excluded.
 
 **Data and privacy**
 

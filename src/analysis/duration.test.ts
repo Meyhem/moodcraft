@@ -39,6 +39,7 @@ test('a day only counts if a day record exists — missing days leave holes, nev
   expect(points[1]!.sampleSize).toBe(0)
   expect(points[1]!.meanImprovement).toBeNull()
   expect(points[2]!.meanImprovement).toBeCloseTo(1, 5) // baseline 4 - score 3
+  expect(points[0]!.confoundedCount).toBe(0)
 })
 
 test('a day is attributed only to the most recent dose — cut off at the next intake', () => {
@@ -65,4 +66,19 @@ test('a bucket with fewer than THIN_SAMPLE contributing days at an offset is mar
   const records = [makeDayRecord('2026-06-01', { score: 2 })]
   const curves = computeDecayCurves(intakes, records, baseline(4))
   expect(curves[0]!.points[0]!.thin).toBe(true)
+})
+
+test('a day carrying a logged event is counted as confounded, not excluded (R-13)', () => {
+  const intakes = [makeIntake('2026-06-01', 100)]
+  const records = [
+    makeDayRecord('2026-06-01', { score: 2, events: ['good-news'] }),
+    makeDayRecord('2026-06-02', { score: 2 }),
+  ]
+  const curves = computeDecayCurves(intakes, records, baseline(4))
+  const points = curves[0]!.points
+  // still included in the mean and sample size — noted, not dropped
+  expect(points[0]!.sampleSize).toBe(1)
+  expect(points[0]!.meanImprovement).toBeCloseTo(2, 5)
+  expect(points[0]!.confoundedCount).toBe(1)
+  expect(points[1]!.confoundedCount).toBe(0)
 })

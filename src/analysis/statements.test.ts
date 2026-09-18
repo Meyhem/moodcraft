@@ -86,19 +86,19 @@ test('the best-dose-duration statement names the bucket with the highest day-0 i
     {
       bucket: { label: '50 mg', minMg: 50, maxMg: 50, doseCount: 4 },
       points: [
-        { dayOffset: 0, meanImprovement: 0.8, sampleSize: 4, thin: true },
-        { dayOffset: 1, meanImprovement: 0.5, sampleSize: 4, thin: true },
-        { dayOffset: 2, meanImprovement: 0.3, sampleSize: 3, thin: true },
-        { dayOffset: 3, meanImprovement: 0.1, sampleSize: 2, thin: true },
+        { dayOffset: 0, meanImprovement: 0.8, sampleSize: 4, thin: true, confoundedCount: 0 },
+        { dayOffset: 1, meanImprovement: 0.5, sampleSize: 4, thin: true, confoundedCount: 0 },
+        { dayOffset: 2, meanImprovement: 0.3, sampleSize: 3, thin: true, confoundedCount: 0 },
+        { dayOffset: 3, meanImprovement: 0.1, sampleSize: 2, thin: true, confoundedCount: 0 },
       ],
     },
     {
       bucket: { label: '100 mg', minMg: 100, maxMg: 100, doseCount: 6 },
       points: [
-        { dayOffset: 0, meanImprovement: 1.8, sampleSize: 6, thin: true },
-        { dayOffset: 1, meanImprovement: 1.5, sampleSize: 6, thin: true },
-        { dayOffset: 2, meanImprovement: 1.2, sampleSize: 5, thin: true },
-        { dayOffset: 3, meanImprovement: 1.2, sampleSize: 4, thin: true },
+        { dayOffset: 0, meanImprovement: 1.8, sampleSize: 6, thin: true, confoundedCount: 0 },
+        { dayOffset: 1, meanImprovement: 1.5, sampleSize: 6, thin: true, confoundedCount: 0 },
+        { dayOffset: 2, meanImprovement: 1.2, sampleSize: 5, thin: true, confoundedCount: 0 },
+        { dayOffset: 3, meanImprovement: 1.2, sampleSize: 4, thin: true, confoundedCount: 0 },
       ],
     },
   ]
