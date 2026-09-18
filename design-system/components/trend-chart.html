@@ -28,10 +28,7 @@
   --severity-4:#7A5F94;
   --severity-5:#5A3F70;
 
-  --event-good:#7FB8A3;
-  --event-good-muted:#1E322D;
-  --event-bad:#C98A8A;
-  --event-bad-muted:#332323;
+  --danger:#C98A8A;
 
   --dose:#C4A059;
   --dose-muted:#302A18;
@@ -91,9 +88,9 @@ hr.div{border:none;border-top:1px solid var(--border-subtle);margin:var(--sp-6) 
 <div class="page" style="max-width:760px;">
   <p class="eyebrow">Component</p>
   <h1 style="font-size:var(--fs-title);">Trend chart</h1>
-  <p>Score line in the severity hue, dose markers in gold, event ticks in
-  teal/rose, baseline as a dashed reference band, and gaps rendered as a
-  literal break in the line &mdash; never bridged or interpolated (R-06).</p>
+  <p>Score line in the severity hue, dose markers in gold, baseline as a
+  dashed reference band, and gaps rendered as a literal break in the line
+  &mdash; never bridged or interpolated (R-06).</p>
 
   <div class="card">
     <svg viewBox="0 0 680 220" width="100%" height="220">
@@ -115,16 +112,10 @@ hr.div{border:none;border-top:1px solid var(--border-subtle);margin:var(--sp-6) 
         <rect x="336" y="196" width="8" height="8" rx="2" fill="var(--dose)" />
         <rect x="616" y="196" width="8" height="8" rx="2" fill="var(--dose)" />
       </g>
-      <g>
-        <circle cx="160" cy="204" r="4" fill="var(--event-bad)" />
-        <circle cx="480" cy="204" r="4" fill="var(--event-good)" />
-      </g>
       <line x1="0" y1="220" x2="680" y2="220" stroke="var(--border-subtle)" />
     </svg>
     <div class="row" style="margin-top:var(--sp-3);gap:var(--sp-5);flex-wrap:wrap;">
       <span class="row swatch-label" style="gap:6px;"><span style="width:10px;height:10px;border-radius:3px;background:var(--dose);display:inline-block;"></span>dose taken</span>
-      <span class="row swatch-label" style="gap:6px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--event-bad);display:inline-block;"></span>bad event</span>
-      <span class="row swatch-label" style="gap:6px;"><span style="width:9px;height:9px;border-radius:50%;background:var(--event-good);display:inline-block;"></span>good event</span>
       <span class="row swatch-label" style="gap:6px;"><span style="width:14px;height:0;border-top:1px dashed var(--baseline-line);display:inline-block;"></span>baseline band</span>
     </div>
   </div>

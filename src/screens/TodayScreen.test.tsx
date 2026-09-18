@@ -62,14 +62,6 @@ test('an existing record loads into the form and edits in place, unmarked (R-05)
   expect(screen.queryByText(/edited|late|updated/i)).not.toBeInTheDocument()
 })
 
-test('ticking an event stores it on the day record', async () => {
-  await dayRecords.put(makeDayRecord(todayIso(), { score: 2 }))
-  renderScreen()
-  await waitFor(() => screen.getByRole('switch', { name: 'Conflict' }))
-  await userEvent.click(screen.getByRole('switch', { name: 'Conflict' }))
-  await waitFor(async () => expect((await dayRecords.all())[0]!.events).toEqual(['conflict']))
-})
-
 test('the dose is a single total in milligrams, with no time input anywhere (R-04)', async () => {
   const med = await medications.add('Medication A')
   renderScreen()

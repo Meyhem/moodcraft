@@ -1,5 +1,4 @@
 import { ITEMS } from './items'
-import { EVENTS } from './events'
 
 test('there are exactly 13 items, in spec order, with unique ids', () => {
   expect(ITEMS).toHaveLength(13)
@@ -19,14 +18,4 @@ test('there are exactly 13 items, in spec order, with unique ids', () => {
     'Poor sleep',
   ])
   expect(new Set(ITEMS.map((i) => i.id)).size).toBe(13)
-})
-
-test('there are 8 events, four good and four bad', () => {
-  expect(EVENTS).toHaveLength(8)
-  expect(EVENTS.filter((e) => e.valence === 'bad').map((e) => e.label)).toEqual([
-    'Bad sleep', 'Conflict', 'Illness', 'Work stress',
-  ])
-  expect(EVENTS.filter((e) => e.valence === 'good').map((e) => e.label)).toEqual([
-    'Good news', 'Social event', 'Exercise', 'Travel',
-  ])
 })

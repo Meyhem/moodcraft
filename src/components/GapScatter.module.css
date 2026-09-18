@@ -5,5 +5,4 @@
 .legendItem { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-micro); color: var(--text-tertiary); }
 .key { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
 .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
-.ring { width: 9px; height: 9px; border-radius: 50%; display: inline-block; border: 2px solid var(--severity-3); }
 .empty { color: var(--text-tertiary); font-size: var(--fs-body); text-align: center; padding: var(--sp-8) 0; }

@@ -1,6 +1,5 @@
 import { meanComposite } from './composite'
 import { responseWindow, withGaps } from './gaps'
-import { isConfounded } from './confounders'
 import type { Baseline, IntakeOutcome } from './types'
 import type { DayRecord, Intake } from '../domain/types'
 
@@ -25,7 +24,6 @@ export function computeOutcomes(
       improvement:
         baseline !== null && windowMean !== null ? baseline.mean - windowMean : null,
       measuredDays: measured.length,
-      confounded: isConfounded(measured),
     }
   })
 }

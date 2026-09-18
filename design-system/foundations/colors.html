@@ -28,10 +28,7 @@
   --severity-4:#7A5F94;
   --severity-5:#5A3F70;
 
-  --event-good:#7FB8A3;
-  --event-good-muted:#1E322D;
-  --event-bad:#C98A8A;
-  --event-bad-muted:#332323;
+  --danger:#C98A8A;
 
   --dose:#C4A059;
   --dose-muted:#302A18;
@@ -93,7 +90,7 @@ hr.div{border:none;border-top:1px solid var(--border-subtle);margin:var(--sp-6) 
   <h1>Color</h1>
   <p>Four hue families, each with a single job. None of them borrow each
   other's meaning &mdash; a severity score is never rendered in the accent
-  color, a dose marker never looks like an event tick.</p>
+  color, a dose marker never looks like a danger state.</p>
 
   <p class="section-title" style="margin-top:var(--sp-8);">Surface &amp; text</p>
   <div class="grid" style="grid-template-columns:repeat(5,1fr);">
@@ -121,10 +118,9 @@ hr.div{border:none;border-top:1px solid var(--border-subtle);margin:var(--sp-6) 
     <div><div class="swatch" style="background:var(--severity-5);"></div><div class="swatch-label">5 &middot; worst</div></div>
   </div>
 
-  <p class="section-title" style="margin-top:var(--sp-8);">Event valence &amp; dose marker</p>
-  <div class="grid" style="grid-template-columns:repeat(4,1fr);">
-    <div><div class="swatch" style="background:var(--event-good);"></div><div class="swatch-label">event-good</div></div>
-    <div><div class="swatch" style="background:var(--event-bad);"></div><div class="swatch-label">event-bad</div></div>
+  <p class="section-title" style="margin-top:var(--sp-8);">Danger &amp; dose marker</p>
+  <div class="grid" style="grid-template-columns:repeat(3,1fr);">
+    <div><div class="swatch" style="background:var(--danger);"></div><div class="swatch-label">danger</div></div>
     <div><div class="swatch" style="background:var(--dose);"></div><div class="swatch-label">dose marker</div></div>
     <div><div class="swatch" style="background:var(--baseline-line);"></div><div class="swatch-label">baseline reference</div></div>
   </div>
@@ -133,7 +129,7 @@ hr.div{border:none;border-top:1px solid var(--border-subtle);margin:var(--sp-6) 
 --text-primary:#EDEBF7;  --text-secondary:#A5A3C4;  --text-tertiary:#6B6890;
 --accent:#8B85F0;  --accent-hover:#A29CFF;  --accent-muted:#2C2A4D;
 --severity-1..5: #D6CFE0 #B9A9CC #9A84B3 #7A5F94 #5A3F70
---event-good:#7FB8A3;  --event-bad:#C98A8A;  --dose:#C4A059;  --baseline-line:#4A4D68;</pre>
+--danger:#C98A8A;  --dose:#C4A059;  --baseline-line:#4A4D68;</pre>
 </div>
 
 </body>

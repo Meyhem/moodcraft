@@ -34,7 +34,7 @@ test('a single isolated recorded day still produces a mark, not an invisible seg
 test('the chart is labelled and lists its marks in text for assistive tech', () => {
   render(
     <TrendChart
-      records={[makeDayRecord('2026-09-10', { score: 4, events: ['conflict'] })]}
+      records={[makeDayRecord('2026-09-10', { score: 4 })]}
       intakes={[makeIntake('2026-09-10', 150)]}
       baseline={null}
       from="2026-09-08"

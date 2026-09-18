@@ -38,7 +38,6 @@ export function runAnalysis(input: AnalysisInput, window: WindowKey): AnalysisRe
       bucket,
       dose,
       decayCurves,
-      confoundedCount: outcomes.filter((o) => o.confounded).length,
     }),
   }
 }

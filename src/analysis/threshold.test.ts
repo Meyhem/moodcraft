@@ -5,7 +5,6 @@ function outcome(gapDays: number | null, improvement: number | null, previousMg 
   return {
     date: '2026-06-01', mg: 150, gapDays, previousMg,
     windowMean: null, improvement, measuredDays: improvement === null ? 0 : 1,
-    confounded: false,
   }
 }
 

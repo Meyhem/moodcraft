@@ -17,7 +17,6 @@ export interface ScatterPoint {
   /** improvement when a baseline exists, otherwise the raw post-dose score */
   value: number
   measuredDays: number
-  confounded: boolean
   inWindow: boolean
 }
 
@@ -39,7 +38,6 @@ export function buildPoints(
       gapDays: o.gapDays!,
       value: hasBaseline ? o.improvement! : o.windowMean!,
       measuredDays: o.measuredDays,
-      confounded: o.confounded,
       inWindow: o.date >= windowFrom,
     }))
 }
@@ -102,7 +100,7 @@ export function GapScatter({ outcomes, hasBaseline, windowFrom, resetThresholdDa
       (p) =>
         `${formatShort(p.date)}: ${p.gapDays} day${p.gapDays === 1 ? '' : 's'} since previous dose, ${
           hasBaseline ? `${p.value.toFixed(1)} improvement` : `${p.value.toFixed(1)} of 5`
-        }${p.confounded ? ', on a day with an event' : ''}.`,
+        }.`,
     ),
   ].join(' ')
 
@@ -112,8 +110,7 @@ export function GapScatter({ outcomes, hasBaseline, windowFrom, resetThresholdDa
         `${active.gapDays} day${active.gapDays === 1 ? '' : 's'} since previous dose`,
         hasBaseline ? `${active.value.toFixed(1)} improvement` : `${active.value.toFixed(1)} of 5`,
         `avg ${avgValue.toFixed(1)} ${hasBaseline ? 'improvement' : 'of 5'}`,
-        active.confounded ? 'on a day with an event' : null,
-      ].filter((line): line is string => line !== null)
+      ]
     : []
   const tooltipWidth = 160
   const tooltipHeight = 14 + tooltipLines.length * 14
@@ -129,11 +126,9 @@ export function GapScatter({ outcomes, hasBaseline, windowFrom, resetThresholdDa
           Each dot is one dose. Its position left-to-right is how many days had passed
           since the previous dose; its height is how well that dose seemed to work — either
           the drop from your baseline score, or, if there's no baseline yet, the raw score
-          in the days right after. An open ring means a logged life event overlapped that
-          dose's response window, which could explain the mood change on its own instead of
-          the medication. Bigger dots are backed by more recorded days. The dashed line
-          marks the gap length your own data suggests sensitivity resets at. Faded dots are
-          outside the currently selected time window. Hover or tap any dot for its exact
+          in the days right after. Bigger dots are backed by more recorded days. The dashed
+          line marks the gap length your own data suggests sensitivity resets at. Faded dots
+          are outside the currently selected time window. Hover or tap any dot for its exact
           numbers, alongside the average across doses in the current window.
         </HelpTooltip>
       </div>
@@ -160,29 +155,16 @@ export function GapScatter({ outcomes, hasBaseline, windowFrom, resetThresholdDa
           </>
         )}
 
-        {points.map((p) =>
-          p.confounded ? (
-            <circle
-              key={p.date}
-              cx={scale.xFor(p.gapDays)}
-              cy={scale.yFor(p)}
-              r={radiusFor(p.measuredDays)}
-              fill="none"
-              stroke="var(--severity-3)"
-              strokeWidth="2"
-              opacity={p.inWindow ? 1 : 0.35}
-            />
-          ) : (
-            <circle
-              key={p.date}
-              cx={scale.xFor(p.gapDays)}
-              cy={scale.yFor(p)}
-              r={radiusFor(p.measuredDays)}
-              fill="var(--severity-3)"
-              opacity={p.inWindow ? 1 : 0.35}
-            />
-          ),
-        )}
+        {points.map((p) => (
+          <circle
+            key={p.date}
+            cx={scale.xFor(p.gapDays)}
+            cy={scale.yFor(p)}
+            r={radiusFor(p.measuredDays)}
+            fill="var(--severity-3)"
+            opacity={p.inWindow ? 1 : 0.35}
+          />
+        ))}
 
         <text x={PAD_X} y={H - 10} fill="var(--text-tertiary)" fontSize="11">
           days since previous dose
@@ -230,7 +212,6 @@ export function GapScatter({ outcomes, hasBaseline, windowFrom, resetThresholdDa
 
       <div className={styles.legend}>
         <span className={styles.legendItem}><span className={styles.dot} style={{ background: 'var(--severity-3)' }} />dose</span>
-        <span className={styles.legendItem}><span className={styles.ring} />on a day with an event</span>
         <span className={styles.legendItem}><span className={styles.key} style={{ borderTop: '1px dashed var(--baseline-line)', height: 0, borderRadius: 0, width: 14 }} />reset threshold</span>
         <span className={styles.legendItem}>faded = outside current window</span>
       </div>

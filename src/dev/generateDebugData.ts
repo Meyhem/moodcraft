@@ -1,7 +1,6 @@
-import { EVENTS } from '../domain/events'
 import { ITEM_IDS } from '../domain/items'
 import { addDays, todayIso } from '../domain/date'
-import type { DayRecord, EventId, Intake, IsoDate, Medication, Score } from '../domain/types'
+import type { DayRecord, Intake, IsoDate, Medication, Score } from '../domain/types'
 import type { ExportFile } from '../data/exportImport'
 
 export interface GenerateDebugDataOptions {
@@ -77,11 +76,7 @@ export function generateDebugExport(options: GenerateDebugDataOptions = {}): Exp
       scores[itemId] = clampScore(underlyingSeverity - relief + noise)
     }
 
-    const events: EventId[] = []
-    if (rand() < 0.2) events.push(pick(EVENTS).id)
-    if (rand() < 0.05) events.push(pick(EVENTS).id)
-
-    dayRecords.push({ date, scores: scores as Record<string, Score>, events: [...new Set(events)] })
+    dayRecords.push({ date, scores: scores as Record<string, Score> })
 
     const isDoseDay =
       dayIndex === firstIntakeOffset ||

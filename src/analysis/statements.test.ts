@@ -2,8 +2,8 @@ import { buildStatements } from './statements'
 import { bucketComparison, findResetThreshold, dosePreviousEffect } from './threshold'
 import type { IntakeOutcome } from './types'
 
-function outcome(gapDays: number | null, improvement: number | null, previousMg = 150, confounded = false): IntakeOutcome {
-  return { date: '2026-06-01', mg: 150, gapDays, previousMg, windowMean: null, improvement, measuredDays: 1, confounded }
+function outcome(gapDays: number | null, improvement: number | null, previousMg = 150): IntakeOutcome {
+  return { date: '2026-06-01', mg: 150, gapDays, previousMg, windowMean: null, improvement, measuredDays: 1 }
 }
 
 // four close doses averaging 0.5 improvement, six spaced ones averaging 1.4,
@@ -22,7 +22,6 @@ function build(outcomes: IntakeOutcome[], baseline = { mean: 4, perItem: {}, day
     bucket: bucketComparison(outcomes),
     dose: dosePreviousEffect(outcomes),
     decayCurves: [],
-    confoundedCount: outcomes.filter((o) => o.confounded).length,
   })
 }
 
@@ -49,12 +48,6 @@ test('the reset statement hedges with "appears to" and never tells the person wh
   expect(reset!.text).not.toMatch(/should|recommend|try|aim|wait at least/i)
 })
 
-test('confounded days are acknowledged rather than silently dropped', () => {
-  const withEvents = [...many, outcome(2, 0.2, 150, true)]
-  const note = build(withEvents).find((s) => s.id === 'confounders')
-  expect(note!.text).toBe('1 of 12 doses fell on days carrying an event, which may explain the mood independently.')
-})
-
 test('without a baseline no effectiveness statement is produced, only spacing (R-10)', () => {
   const statements = buildStatements({
     outcomes: many.map((o) => ({ ...o, improvement: null })),
@@ -63,7 +56,6 @@ test('without a baseline no effectiveness statement is produced, only spacing (R
     bucket: { shortMean: null, longMean: null, difference: null, sampleSize: 0 },
     dose: null,
     decayCurves: [],
-    confoundedCount: 0,
   })
   expect(statements.some((s) => s.id === 'spacing-buckets')).toBe(false)
   expect(statements.find((s) => s.id === 'no-baseline')!.text).toBe(
@@ -75,7 +67,7 @@ test('with nothing recorded at all the list is a single plain statement', () => 
   const statements = buildStatements({
     outcomes: [], baseline: null, threshold: null,
     bucket: { shortMean: null, longMean: null, difference: null, sampleSize: 0 },
-    dose: null, decayCurves: [], confoundedCount: 0,
+    dose: null, decayCurves: [],
   })
   expect(statements).toHaveLength(1)
   expect(statements[0]!.text).toBe('No doses have been recorded yet.')
@@ -86,19 +78,19 @@ test('the best-dose-duration statement names the bucket with the highest day-0 i
     {
       bucket: { label: '50 mg', minMg: 50, maxMg: 50, doseCount: 4 },
       points: [
-        { dayOffset: 0, meanImprovement: 0.8, sampleSize: 4, thin: true, confoundedCount: 0 },
-        { dayOffset: 1, meanImprovement: 0.5, sampleSize: 4, thin: true, confoundedCount: 0 },
-        { dayOffset: 2, meanImprovement: 0.3, sampleSize: 3, thin: true, confoundedCount: 0 },
-        { dayOffset: 3, meanImprovement: 0.1, sampleSize: 2, thin: true, confoundedCount: 0 },
+        { dayOffset: 0, meanImprovement: 0.8, sampleSize: 4, thin: true },
+        { dayOffset: 1, meanImprovement: 0.5, sampleSize: 4, thin: true },
+        { dayOffset: 2, meanImprovement: 0.3, sampleSize: 3, thin: true },
+        { dayOffset: 3, meanImprovement: 0.1, sampleSize: 2, thin: true },
       ],
     },
     {
       bucket: { label: '100 mg', minMg: 100, maxMg: 100, doseCount: 6 },
       points: [
-        { dayOffset: 0, meanImprovement: 1.8, sampleSize: 6, thin: true, confoundedCount: 0 },
-        { dayOffset: 1, meanImprovement: 1.5, sampleSize: 6, thin: true, confoundedCount: 0 },
-        { dayOffset: 2, meanImprovement: 1.2, sampleSize: 5, thin: true, confoundedCount: 0 },
-        { dayOffset: 3, meanImprovement: 1.2, sampleSize: 4, thin: true, confoundedCount: 0 },
+        { dayOffset: 0, meanImprovement: 1.8, sampleSize: 6, thin: true },
+        { dayOffset: 1, meanImprovement: 1.5, sampleSize: 6, thin: true },
+        { dayOffset: 2, meanImprovement: 1.2, sampleSize: 5, thin: true },
+        { dayOffset: 3, meanImprovement: 1.2, sampleSize: 4, thin: true },
       ],
     },
   ]
@@ -112,7 +104,6 @@ test('the best-dose-duration statement names the bucket with the highest day-0 i
     bucket: bucketComparison(many),
     dose: dosePreviousEffect(many),
     decayCurves,
-    confoundedCount: 0,
   })
   const best = statements.find((s) => s.id === 'best-dose-duration')
   expect(best!.text).toBe(

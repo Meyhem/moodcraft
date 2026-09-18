@@ -1,19 +1,17 @@
 import { useState } from 'react'
 import { composite } from '../analysis'
 import { addDays, daysBetween, formatShort, rangeInclusive } from '../domain/date'
-import { eventDef } from '../domain/events'
 import { HelpTooltip } from '../ui/HelpTooltip'
 import type { Baseline } from '../analysis'
 import type { DayRecord, Intake, IsoDate } from '../domain/types'
 import styles from './TrendChart.module.css'
 
 const W = 680
-const H = 250
+const H = 230
 const PLOT_TOP = 20
 const PLOT_BOTTOM = 190 // marks live below this line
 const DOSE_Y = PLOT_BOTTOM + 6
-const EVENT_Y = PLOT_BOTTOM + 24
-const TICKS_Y = PLOT_BOTTOM + 46
+const TICKS_Y = PLOT_BOTTOM + 28
 const PAD_X = 20
 const MAX_TICKS = 6
 
@@ -71,7 +69,6 @@ interface DayInfo {
   x: number
   score: number | null
   doseMg: number[]
-  eventLabel: string | null
 }
 
 function buildDayInfo(
@@ -84,13 +81,11 @@ function buildDayInfo(
   return dates.map((date) => {
     const record = byDate.get(date)
     const value = record ? composite(record) : NaN
-    const eventId = record?.events.find((id) => eventDef(id) !== undefined)
     return {
       date,
       x: xFor(date, from, days),
       score: Number.isNaN(value) ? null : value,
       doseMg: intakes.filter((i) => i.date === date).map((i) => i.mg),
-      eventLabel: eventId ? eventDef(eventId)!.label : null,
     }
   })
 }
@@ -119,14 +114,6 @@ export function TrendChart({ records, intakes, baseline, from, to }: Props) {
   const active = activeDate !== null ? dayInfos.find((d) => d.date === activeDate) ?? null : null
   const columnWidth = (W - PAD_X * 2) / Math.max(1, days - 1)
 
-  const eventDays = records
-    .filter((r) => r.events.some((id) => eventDef(id) !== undefined))
-    .map((r) => ({
-      date: r.date,
-      x: xFor(r.date, from, days),
-      valence: eventDef(r.events.find((id) => eventDef(id) !== undefined)!)!.valence,
-    }))
-
   const description = [
     `Scores from ${formatShort(from)} to ${formatShort(to)}.`,
     ...intakes.map((i) => `${formatShort(i.date)}: ${i.mg} mg.`),
@@ -137,7 +124,7 @@ export function TrendChart({ records, intakes, baseline, from, to }: Props) {
     ? [
         formatShort(active.date),
         active.score !== null ? `${active.score.toFixed(1)} of 5` : 'no score recorded',
-        [active.doseMg.map((mg) => `${mg} mg`).join(', '), active.eventLabel].filter(Boolean).join(' · ') || null,
+        active.doseMg.length > 0 ? active.doseMg.map((mg) => `${mg} mg`).join(', ') : null,
       ].filter((line): line is string => line !== null)
     : []
   const tooltipWidth = 150
@@ -154,9 +141,8 @@ export function TrendChart({ records, intakes, baseline, from, to }: Props) {
           better. The line breaks wherever a day wasn't recorded, since missing days are
           never guessed at or bridged. The dashed band marks your baseline: the average
           score from the days recorded before you ever started this medication, when there
-          is one. The small squares below the line mark days you took a dose; the colored
-          dots mark days you logged a life event, which could explain a mood change on its
-          own. Hover or tap any point in the chart to see that day's exact numbers.
+          is one. The small squares below the line mark days you took a dose. Hover or tap
+          any point in the chart to see that day's exact numbers.
         </HelpTooltip>
       </div>
       <svg
@@ -195,16 +181,6 @@ export function TrendChart({ records, intakes, baseline, from, to }: Props) {
           <rect key={i.date} x={xFor(i.date, from, days) - 4} y={DOSE_Y} width="8" height="8" rx="2" fill="var(--dose)" />
         ))}
 
-        {eventDays.map((e) => (
-          <circle
-            key={e.date}
-            cx={e.x}
-            cy={EVENT_Y}
-            r="4"
-            fill={e.valence === 'good' ? 'var(--event-good)' : 'var(--event-bad)'}
-          />
-        ))}
-
         {pickTicks(from, to, days).map((date) => (
           <text
             key={date}
@@ -227,7 +203,7 @@ export function TrendChart({ records, intakes, baseline, from, to }: Props) {
             x={d.x - columnWidth / 2}
             y={0}
             width={columnWidth}
-            height={EVENT_Y + 10}
+            height={DOSE_Y + 10}
             fill="transparent"
             onMouseEnter={() => setActiveDate(d.date)}
             onClick={() => setActiveDate((prev) => (prev === d.date ? null : d.date))}
@@ -237,7 +213,7 @@ export function TrendChart({ records, intakes, baseline, from, to }: Props) {
         {active && (
           <g>
             <line
-              x1={active.x} x2={active.x} y1={PLOT_TOP - 10} y2={EVENT_Y + 8}
+              x1={active.x} x2={active.x} y1={PLOT_TOP - 10} y2={DOSE_Y + 8}
               stroke="var(--border-default)" strokeDasharray="3 3"
             />
             <rect
@@ -261,8 +237,6 @@ export function TrendChart({ records, intakes, baseline, from, to }: Props) {
 
       <div className={styles.legend}>
         <span className={styles.legendItem}><span className={styles.key} style={{ background: 'var(--dose)' }} />dose taken</span>
-        <span className={styles.legendItem}><span className={styles.dot} style={{ background: 'var(--event-bad)' }} />bad event</span>
-        <span className={styles.legendItem}><span className={styles.dot} style={{ background: 'var(--event-good)' }} />good event</span>
         <span className={styles.legendItem}><span className={styles.key} style={{ borderTop: '1px dashed var(--baseline-line)', height: 0, borderRadius: 0, width: 14 }} />baseline band</span>
       </div>
     </div>

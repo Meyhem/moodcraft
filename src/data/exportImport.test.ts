@@ -23,7 +23,7 @@ test('export carries every record and the schema version', async () => {
 
 test('a round trip restores the same data', async () => {
   await medications.add('Medication A')
-  await dayRecords.put(makeDayRecord('2026-09-15', { events: ['conflict'] }))
+  await dayRecords.put(makeDayRecord('2026-09-15', { score: 2 }))
   const json = await serializeExport()
 
   closeDb(); await deleteDb()
@@ -31,7 +31,7 @@ test('a round trip restores the same data', async () => {
 
   const restored = await dayRecords.all()
   expect(restored).toHaveLength(1)
-  expect(restored[0]!.events).toEqual(['conflict'])
+  expect(Object.values(restored[0]!.scores)[0]).toBe(2)
 })
 
 test('a foreign file is rejected', async () => {

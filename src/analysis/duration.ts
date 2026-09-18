@@ -1,6 +1,5 @@
 import { addDays } from '../domain/date'
 import { composite } from './composite'
-import { isConfounded } from './confounders'
 import { THIN_SAMPLE } from './types'
 import type { Baseline } from './types'
 import type { DayRecord, Intake, IsoDate } from '../domain/types'
@@ -17,8 +16,6 @@ export interface DecayPoint {
   meanImprovement: number | null
   sampleSize: number
   thin: boolean
-  /** R-13: how many of the contributing days carried a logged event — noted, not excluded */
-  confoundedCount: number
 }
 
 export interface DecayCurve {
@@ -100,9 +97,6 @@ export function computeDecayCurves(
 
   const sums = new Map<DoseBucket, number[]>(buckets.map((b) => [b, Array(MAX_DAY_OFFSET + 1).fill(0)]))
   const counts = new Map<DoseBucket, number[]>(buckets.map((b) => [b, Array(MAX_DAY_OFFSET + 1).fill(0)]))
-  const confoundedCounts = new Map<DoseBucket, number[]>(
-    buckets.map((b) => [b, Array(MAX_DAY_OFFSET + 1).fill(0)]),
-  )
 
   sorted.forEach((intake, index) => {
     const bucket = bucketFor(buckets, intake.mg)
@@ -121,7 +115,6 @@ export function computeDecayCurves(
 
       sums.get(bucket)![offset]! += baseline.mean - value
       counts.get(bucket)![offset]! += 1
-      if (isConfounded([record])) confoundedCounts.get(bucket)![offset]! += 1
     }
   })
 
@@ -134,7 +127,6 @@ export function computeDecayCurves(
         meanImprovement: sampleSize > 0 ? sums.get(bucket)![offset]! / sampleSize : null,
         sampleSize,
         thin: sampleSize < THIN_SAMPLE,
-        confoundedCount: confoundedCounts.get(bucket)![offset]!,
       }
     }),
   }))

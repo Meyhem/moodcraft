@@ -19,10 +19,7 @@
   --severity-4:#7A5F94;
   --severity-5:#5A3F70;
 
-  --event-good:#7FB8A3;
-  --event-good-muted:#1E322D;
-  --event-bad:#C98A8A;
-  --event-bad-muted:#332323;
+  --danger:#C98A8A;
 
   --dose:#C4A059;
   --dose-muted:#302A18;

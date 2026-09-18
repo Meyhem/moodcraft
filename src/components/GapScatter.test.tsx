@@ -11,7 +11,6 @@ function outcome(overrides: Partial<IntakeOutcome>): IntakeOutcome {
     windowMean: 3,
     improvement: 1,
     measuredDays: 2,
-    confounded: false,
     ...overrides,
   }
 }
@@ -77,16 +76,4 @@ test('the accessible description includes the average across shown doses', () =>
     />,
   )
   expect(screen.getByRole('img', { name: /average improvement across the shown doses is 2\.0/i })).toBeInTheDocument()
-})
-
-test('a confounded dose is noted in the accessible description', () => {
-  render(
-    <GapScatter
-      outcomes={[outcome({ confounded: true })]}
-      hasBaseline={true}
-      windowFrom="2026-09-01"
-      resetThresholdDays={null}
-    />,
-  )
-  expect(screen.getByRole('img', { name: /on a day with an event/i })).toBeInTheDocument()
 })

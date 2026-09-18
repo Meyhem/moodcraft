@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { DateNavigator } from '../components/DateNavigator'
-import { EventChipGroup } from '../components/EventChipGroup'
 import { IntakeField } from '../components/IntakeField'
 import { ItemRow } from '../components/ItemRow'
 import { UnknownDayState } from '../components/UnknownDayState'
@@ -9,7 +8,7 @@ import { SectionTitle } from '../ui/SectionTitle'
 import { ITEMS, ITEM_IDS } from '../domain/items'
 import { addDays, formatShort, todayIso } from '../domain/date'
 import { useAppData } from '../state/AppDataProvider'
-import type { EventId, IsoDate, Score } from '../domain/types'
+import type { IsoDate, Score } from '../domain/types'
 import styles from './TodayScreen.module.css'
 
 export default function TodayScreen() {
@@ -17,7 +16,6 @@ export default function TodayScreen() {
   const today = todayIso()
   const [date, setDate] = useState<IsoDate>(today)
   const [scores, setScores] = useState<Record<string, Score>>({})
-  const [events, setEvents] = useState<EventId[]>([])
   const [mg, setMg] = useState('')
 
   const record = useMemo(() => data.dayRecords.find((r) => r.date === date), [data.dayRecords, date])
@@ -32,29 +30,22 @@ export default function TodayScreen() {
     if (data.loading || hydratedDate.current === date) return
     hydratedDate.current = date
     setScores(record?.scores ?? {})
-    setEvents(record?.events ?? [])
     setMg(intake ? String(intake.mg) : '')
   }, [data.loading, date, record, intake])
 
   const scored = ITEM_IDS.filter((id) => scores[id] !== undefined).length
   const complete = scored === ITEM_IDS.length
 
-  async function persist(nextScores: Record<string, Score>, nextEvents: EventId[]) {
+  async function persist(nextScores: Record<string, Score>) {
     if (ITEM_IDS.every((id) => nextScores[id] !== undefined)) {
-      await data.saveDayRecord({ date, scores: nextScores, events: nextEvents })
+      await data.saveDayRecord({ date, scores: nextScores })
     }
   }
 
   function onScore(id: string, score: Score) {
     const next = { ...scores, [id]: score }
     setScores(next)
-    void persist(next, events)
-  }
-
-  function onToggleEvent(id: EventId) {
-    const next = events.includes(id) ? events.filter((e) => e !== id) : [...events, id]
-    setEvents(next)
-    void persist(scores, next)
+    void persist(next)
   }
 
   async function commitDose() {
@@ -98,11 +89,6 @@ export default function TodayScreen() {
             </p>
           )}
         </Card>
-
-        <section aria-labelledby="events-title">
-          <SectionTitle><span id="events-title">Events</span></SectionTitle>
-          <EventChipGroup selected={events} onToggle={onToggleEvent} />
-        </section>
 
         <section aria-labelledby="intake-title">
           <SectionTitle><span id="intake-title">Medication</span></SectionTitle>

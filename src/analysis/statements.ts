@@ -11,7 +11,6 @@ export interface StatementInput {
   bucket: Bucket
   dose: { correlation: number; sampleSize: number } | null
   decayCurves: DecayCurve[]
-  confoundedCount: number
 }
 
 const round1 = (n: number) => (Math.round(n * 10) / 10).toFixed(1)
@@ -21,7 +20,7 @@ function statement(id: string, text: string, emphasis: string[], sampleSize: num
 }
 
 export function buildStatements(input: StatementInput): Statement[] {
-  const { outcomes, baseline, threshold, bucket, dose, decayCurves, confoundedCount } = input
+  const { outcomes, baseline, threshold, bucket, dose, decayCurves } = input
   if (outcomes.length === 0) {
     return [statement('no-intakes', 'No doses have been recorded yet.', [], 0)]
   }
@@ -125,17 +124,6 @@ export function buildStatements(input: StatementInput): Statement[] {
         ),
       )
     }
-  }
-
-  if (confoundedCount > 0) {
-    out.push(
-      statement(
-        'confounders',
-        `${confoundedCount} of ${outcomes.length} doses fell on days carrying an event, which may explain the mood independently.`,
-        [],
-        outcomes.length,
-      ),
-    )
   }
 
   return out

@@ -23,8 +23,6 @@ export interface IntakeOutcome {
   improvement: number | null
   /** recorded days found in the response window */
   measuredDays: number
-  /** the window contained a day carrying any event (R-13) */
-  confounded: boolean
 }
 
 export interface Statement {

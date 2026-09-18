@@ -60,7 +60,7 @@ history-rewriting git operation (force-push, reset --hard, amending a pushed com
 ### Layering
 
 ```
-src/domain/    — pure types and constants: Item/Event definitions, date arithmetic. No I/O.
+src/domain/    — pure types and constants: Item definitions, date arithmetic. No I/O.
 src/analysis/  — pure analysis engine over domain types. No React, no I/O. See below.
 src/data/      — IndexedDB repositories (idb) + migrations + JSON export/import. The only I/O layer.
 src/state/     — React context (AppDataProvider) and hooks bridging data + analysis to UI.

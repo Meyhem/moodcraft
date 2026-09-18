@@ -60,11 +60,7 @@ export function DoseDecayChart({ curves }: Props) {
     .map((curve) => {
       const parts = curve.points
         .filter((p) => p.meanImprovement !== null)
-        .map((p) => {
-          const notes = [p.thin ? 'thin' : null, p.confoundedCount > 0 ? `${p.confoundedCount} of ${p.sampleSize} days had an event` : null]
-            .filter((n): n is string => n !== null)
-          return `day ${p.dayOffset}: ${p.meanImprovement!.toFixed(1)}${notes.length ? ` (${notes.join(', ')})` : ''}`
-        })
+        .map((p) => `day ${p.dayOffset}: ${p.meanImprovement!.toFixed(1)}${p.thin ? ' (thin)' : ''}`)
       return `${curve.bucket.label} (${curve.bucket.doseCount} doses): ${parts.join(', ')}.`
     })
     .join(' ')
@@ -79,9 +75,7 @@ export function DoseDecayChart({ curves }: Props) {
           stops counting toward a dose once a later dose has been taken, so no day is
           credited to two doses at once — doses you take close together will have shorter
           lines for that reason, not because the effect was weaker. Hollow points are
-          backed by fewer recorded days. A dashed ring means at least one of the days
-          behind that point also carried a logged life event, which may explain the mood
-          change independently of the dose. Hover or tap any point for its exact numbers.
+          backed by fewer recorded days. Hover or tap any point for its exact numbers.
         </HelpTooltip>
       </div>
       <svg
@@ -108,19 +102,6 @@ export function DoseDecayChart({ curves }: Props) {
                   strokeWidth={p.thin ? 2 : 0}
                 />
               ))}
-              {plotted
-                .filter((p) => p.confoundedCount > 0)
-                .map((p) => (
-                  <circle
-                    key={`confounded-${p.dayOffset}`}
-                    cx={scale.xFor(p.dayOffset)}
-                    cy={scale.yFor(p.meanImprovement!)}
-                    r={(p.thin ? 4 : 5) + 3}
-                    fill="none"
-                    stroke="var(--severity-3)"
-                    strokeDasharray="2 2"
-                  />
-                ))}
               {plotted.map((p) => (
                 <circle
                   key={`hit-${p.dayOffset}`}
@@ -155,7 +136,7 @@ export function DoseDecayChart({ curves }: Props) {
               x={Math.min(Math.max(scale.xFor(activePoint.dayOffset) - 75, PAD_X), W - PAD_X - 150)}
               y={4}
               width={150}
-              height={activePoint.confoundedCount > 0 ? 54 : 44}
+              height={44}
               rx="8"
               fill="var(--bg-overlay)"
               stroke="var(--border-subtle)"
@@ -177,16 +158,6 @@ export function DoseDecayChart({ curves }: Props) {
               {activePoint.meanImprovement.toFixed(1)} improvement
               {activePoint.thin ? ', thin sample' : ''}
             </text>
-            {activePoint.confoundedCount > 0 && (
-              <text
-                x={Math.min(Math.max(scale.xFor(activePoint.dayOffset) - 65, PAD_X + 10), W - PAD_X - 140)}
-                y={44}
-                fill="var(--text-secondary)"
-                fontSize="10"
-              >
-                {activePoint.confoundedCount} of {activePoint.sampleSize} days had an event
-              </text>
-            )}
           </g>
         )}
       </svg>
@@ -201,10 +172,6 @@ export function DoseDecayChart({ curves }: Props) {
         <span className={styles.legendItem}>
           <span className={styles.ring} />
           thin sample
-        </span>
-        <span className={styles.legendItem}>
-          <span className={styles.eventRing} />
-          on a day with an event
         </span>
       </div>
     </div>

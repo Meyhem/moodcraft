@@ -14,11 +14,11 @@ test('day records round-trip and come back in date order', async () => {
 })
 
 test('putting the same date twice replaces, never duplicates (R-01)', async () => {
-  await dayRecords.put(makeDayRecord('2026-09-15', { events: ['conflict'] }))
-  await dayRecords.put(makeDayRecord('2026-09-15', { events: [] }))
+  await dayRecords.put(makeDayRecord('2026-09-15', { score: 2 }))
+  await dayRecords.put(makeDayRecord('2026-09-15', { score: 4 }))
   const all = await dayRecords.all()
   expect(all).toHaveLength(1)
-  expect(all[0]!.events).toEqual([])
+  expect(Object.values(all[0]!.scores)[0]).toBe(4)
 })
 
 test('a removed day record becomes unknown again, not zero (R-06)', async () => {

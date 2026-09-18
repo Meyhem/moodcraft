@@ -29,7 +29,7 @@ test('an older database is upgraded without losing rows', async () => {
       MIGRATIONS[0]!.upgrade(db, null as never)
     },
   })
-  await legacy.put('dayRecords', { date: '2026-09-15', scores: {}, events: [] })
+  await legacy.put('dayRecords', { date: '2026-09-15', scores: {} })
   legacy.close()
 
   const db = await openDb('moodcraft-test')

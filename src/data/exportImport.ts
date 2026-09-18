@@ -3,7 +3,7 @@ import { dayRecords } from './dayRecords'
 import { intakes } from './intakes'
 import { medications } from './medications'
 import { todayIso } from '../domain/date'
-import type { DayRecord, EventId, Intake, IsoDate, ItemId, Medication, Score } from '../domain/types'
+import type { DayRecord, Intake, IsoDate, ItemId, Medication, Score } from '../domain/types'
 
 export interface ExportFile {
   format: 'moodcraft-export'
@@ -83,13 +83,9 @@ function readDayRecord(value: unknown, index: number): DayRecord {
   for (const [itemId, score] of Object.entries(value.scores)) {
     if (!SCORES.includes(score)) return reject(`has a score outside 1-5 for ${itemId}`)
   }
-  if (!Array.isArray(value.events) || value.events.some((e) => typeof e !== 'string')) {
-    return reject('has events that are not a list of names')
-  }
   return {
     date: value.date,
     scores: value.scores as Record<ItemId, Score>,
-    events: value.events as EventId[],
   }
 }
 

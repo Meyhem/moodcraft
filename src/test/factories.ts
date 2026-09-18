@@ -15,7 +15,6 @@ export function makeDayRecord(
   return {
     date: date as IsoDate,
     scores: makeScores(score),
-    events: [],
     ...rest,
   }
 }
