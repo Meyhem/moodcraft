@@ -1,0 +1,8 @@
+.screen { display: grid; gap: var(--sp-6); }
+.chartColumn { display: grid; gap: var(--sp-4); }
+.heading { font-size: var(--fs-title); line-height: var(--lh-title); margin: 0; }
+.statements { display: grid; gap: var(--sp-3); align-content: start; }
+
+@media (min-width: 1024px) {
+  .screen { grid-template-columns: 1fr 280px; gap: var(--sp-8); align-items: start; }
+}
