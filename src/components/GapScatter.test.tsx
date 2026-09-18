@@ -64,6 +64,21 @@ test('the chart is labelled and lists gap/outcome pairs for assistive tech', () 
   expect(screen.getByRole('img', { name: /4 days since previous dose/i })).toBeInTheDocument()
 })
 
+test('the accessible description includes the average across shown doses', () => {
+  render(
+    <GapScatter
+      outcomes={[
+        outcome({ date: '2026-09-08', gapDays: 3, improvement: 1 }),
+        outcome({ date: '2026-09-10', gapDays: 5, improvement: 3 }),
+      ]}
+      hasBaseline={true}
+      windowFrom="2026-09-01"
+      resetThresholdDays={null}
+    />,
+  )
+  expect(screen.getByRole('img', { name: /average improvement across the shown doses is 2\.0/i })).toBeInTheDocument()
+})
+
 test('a confounded dose is noted in the accessible description', () => {
   render(
     <GapScatter

@@ -53,6 +53,10 @@ function radiusFor(measuredDays: number): number {
   return 3 + Math.min(measuredDays, 3) * 1.5
 }
 
+function average(values: number[]): number {
+  return values.reduce((sum, v) => sum + v, 0) / values.length
+}
+
 interface Scale { xFor: (gapDays: number) => number; yFor: (point: ScatterPoint) => number }
 
 function buildScale(points: ScatterPoint[], hasBaseline: boolean, resetThresholdDays: number | null): Scale {
@@ -89,8 +93,11 @@ export function GapScatter({ outcomes, hasBaseline, windowFrom, resetThresholdDa
   const yLabel = hasBaseline ? 'improvement' : 'score after dose'
   const active = activeDate !== null ? points.find((p) => p.date === activeDate) ?? null : null
 
+  const inWindowPoints = points.filter((p) => p.inWindow)
+  const avgValue = average((inWindowPoints.length > 0 ? inWindowPoints : points).map((p) => p.value))
+
   const description = [
-    `Gap in days since the previous dose plotted against ${yLabel}.`,
+    `Gap in days since the previous dose plotted against ${yLabel}. Average ${yLabel} across the shown doses is ${avgValue.toFixed(1)}.`,
     ...points.map(
       (p) =>
         `${formatShort(p.date)}: ${p.gapDays} day${p.gapDays === 1 ? '' : 's'} since previous dose, ${
@@ -104,6 +111,7 @@ export function GapScatter({ outcomes, hasBaseline, windowFrom, resetThresholdDa
         formatShort(active.date),
         `${active.gapDays} day${active.gapDays === 1 ? '' : 's'} since previous dose`,
         hasBaseline ? `${active.value.toFixed(1)} improvement` : `${active.value.toFixed(1)} of 5`,
+        `avg ${avgValue.toFixed(1)} ${hasBaseline ? 'improvement' : 'of 5'}`,
         active.confounded ? 'on a day with an event' : null,
       ].filter((line): line is string => line !== null)
     : []
@@ -126,7 +134,7 @@ export function GapScatter({ outcomes, hasBaseline, windowFrom, resetThresholdDa
           the medication. Bigger dots are backed by more recorded days. The dashed line
           marks the gap length your own data suggests sensitivity resets at. Faded dots are
           outside the currently selected time window. Hover or tap any dot for its exact
-          numbers.
+          numbers, alongside the average across doses in the current window.
         </HelpTooltip>
       </div>
       <svg
