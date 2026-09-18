@@ -1,4 +1,3 @@
-import { useId } from 'react'
 import styles from './SegmentedScore.module.css'
 import type { Score } from '../domain/types'
 
@@ -18,7 +17,6 @@ interface Props {
 }
 
 export function SegmentedScore({ label, value, onChange, compact = false }: Props) {
-  const labelId = useId()
   function onKeyDown(event: React.KeyboardEvent, score: Score) {
     const delta = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0
     if (delta === 0) return
@@ -30,8 +28,7 @@ export function SegmentedScore({ label, value, onChange, compact = false }: Prop
   }
 
   return (
-    <div className={compact ? `${styles.group} ${styles.compact}` : styles.group} role="radiogroup" aria-labelledby={labelId}>
-      <span id={labelId} className="visually-hidden">{label}</span>
+    <div className={compact ? `${styles.group} ${styles.compact}` : styles.group} role="radiogroup" aria-label={label}>
       {SCORES.map((score) => (
         <button
           key={score}
