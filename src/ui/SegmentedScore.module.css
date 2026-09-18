@@ -1,0 +1,21 @@
+.group { display: flex; gap: 6px; }
+.compact { gap: 5px; }
+
+.opt {
+  flex: 1;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-overlay);
+  color: var(--text-tertiary);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  cursor: pointer;
+}
+.compact .opt { height: 34px; border-radius: 9px; }
+
+.on1 { background: var(--severity-1); color: var(--on-severity-light); border-color: transparent; }
+.on2 { background: var(--severity-2); color: var(--on-severity-light); border-color: transparent; }
+.on3 { background: var(--severity-3); color: var(--on-severity-dark); border-color: transparent; }
+.on4 { background: var(--severity-4); color: var(--on-severity-dark); border-color: transparent; }
+.on5 { background: var(--severity-5); color: var(--on-severity-dark); border-color: transparent; }
