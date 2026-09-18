@@ -1,0 +1,17 @@
+.screen { display: grid; gap: var(--sp-6); }
+.form { display: grid; gap: var(--sp-6); }
+.items { padding: var(--sp-2) var(--sp-6); }
+.itemGrid { display: grid; gap: 0; }
+.progress { font-size: var(--fs-micro); color: var(--text-tertiary); margin: var(--sp-3) 0; }
+.rail { display: none; }
+.railCard { padding: var(--sp-3); margin-bottom: var(--sp-2); }
+.railDate { font-size: var(--fs-label); color: var(--text-secondary); }
+.railNote { font-size: var(--fs-micro); color: var(--text-tertiary); }
+
+@media (min-width: 768px) {
+  .itemGrid { grid-template-columns: 1fr 1fr; column-gap: var(--sp-6); }
+}
+@media (min-width: 1024px) {
+  .screen { grid-template-columns: 1fr 220px; align-items: start; gap: var(--sp-8); }
+  .rail { display: block; }
+}
