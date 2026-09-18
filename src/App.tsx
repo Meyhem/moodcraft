@@ -1,18 +1,19 @@
-import { NavLink, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { NavShell } from './components/NavShell'
+import TodayScreen from './screens/TodayScreen'
+import TrendsScreen from './screens/TrendsScreen'
+import LibraryScreen from './screens/LibraryScreen'
 
 export default function App() {
   return (
-    <div>
-      <nav>
-        <NavLink to="/today">Today</NavLink>
-        <NavLink to="/trends">Trends</NavLink>
-        <NavLink to="/library">Library</NavLink>
-      </nav>
+    <NavShell>
       <Routes>
-        <Route path="/today" element={<main />} />
-        <Route path="/trends" element={<main />} />
-        <Route path="/library" element={<main />} />
+        <Route path="/" element={<Navigate to="/today" replace />} />
+        <Route path="/today" element={<TodayScreen />} />
+        <Route path="/trends" element={<TrendsScreen />} />
+        <Route path="/library" element={<LibraryScreen />} />
+        <Route path="*" element={<Navigate to="/today" replace />} />
       </Routes>
-    </div>
+    </NavShell>
   )
 }
