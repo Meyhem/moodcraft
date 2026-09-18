@@ -1,0 +1,62 @@
+import { render, screen, waitFor, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import LibraryScreen from './LibraryScreen'
+import { AppDataProvider } from '../state/AppDataProvider'
+import { closeDb, deleteDb } from '../data/db'
+import { intakes } from '../data/intakes'
+import { medications } from '../data/medications'
+import { makeIntake } from '../test/factories'
+
+afterEach(async () => { closeDb(); await deleteDb() })
+
+function renderScreen() {
+  return render(<AppDataProvider><LibraryScreen /></AppDataProvider>)
+}
+
+test('lists every medication with how many intakes it has', async () => {
+  const a = await medications.add('Medication A')
+  await medications.add('Caffeine')
+  await intakes.put(makeIntake('2026-06-02', 150, a.id))
+  await intakes.put(makeIntake('2026-06-06', 150, a.id))
+
+  renderScreen()
+  await waitFor(() => expect(screen.getByRole('list')).toBeInTheDocument())
+  const list = within(screen.getByRole('list'))
+  expect(list.getByText('Medication A')).toBeInTheDocument()
+  expect(list.getByText('2 intakes · since Jun 2')).toBeInTheDocument()
+  expect(list.getByText('Caffeine')).toBeInTheDocument()
+})
+
+test('exactly one medication is under analysis and the others can take over (R-11)', async () => {
+  await medications.add('Medication A')
+  await medications.add('Caffeine')
+  renderScreen()
+  await waitFor(() => expect(screen.getAllByText('under analysis')).toHaveLength(1))
+  await userEvent.click(screen.getAllByRole('button', { name: 'Analyze this' })[0]!)
+  await waitFor(() => expect(screen.getAllByText('under analysis')).toHaveLength(1))
+  expect(await medications.all()).toHaveLength(2) // switching discarded nothing
+})
+
+test('a medication can be added', async () => {
+  renderScreen()
+  await waitFor(() => screen.getByRole('button', { name: '+ Add medication' }))
+  await userEvent.click(screen.getByRole('button', { name: '+ Add medication' }))
+  await userEvent.type(screen.getByRole('textbox', { name: 'Medication name' }), 'Melatonin')
+  await userEvent.click(screen.getByRole('button', { name: 'Add' }))
+  await waitFor(async () => expect(await medications.all()).toHaveLength(1))
+})
+
+test('export is offered here, described as a file on the device (R-19)', async () => {
+  renderScreen()
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Export' })).toBeInTheDocument())
+  expect(screen.getByText('Saves a JSON file to your device')).toBeInTheDocument()
+})
+
+test('a medication with no measured baseline says only spacing can be analysed (R-10)', async () => {
+  const med = await medications.add('Medication A')
+  await intakes.put(makeIntake('2026-06-02', 150, med.id))
+  renderScreen()
+  await waitFor(() =>
+    expect(screen.getByText(/only the spacing between doses/)).toBeInTheDocument(),
+  )
+})

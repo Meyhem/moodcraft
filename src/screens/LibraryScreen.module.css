@@ -1,0 +1,10 @@
+.screen { display: grid; gap: var(--sp-6); }
+.listColumn { display: grid; gap: var(--sp-4); align-content: start; }
+.heading { font-size: var(--fs-title); line-height: var(--lh-title); margin: 0; }
+.detail { display: grid; gap: var(--sp-3); align-content: start; }
+.detailName { font-size: var(--fs-subtitle); color: var(--text-primary); margin: 0 0 var(--sp-2); }
+.detailMeta { font-size: var(--fs-body); color: var(--text-secondary); margin: 0; }
+
+@media (min-width: 1024px) {
+  .screen { grid-template-columns: 1fr 320px; gap: var(--sp-8); align-items: start; }
+}
