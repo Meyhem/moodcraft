@@ -1,0 +1,18 @@
+.toggle {
+  display: inline-flex;
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  padding: 4px;
+}
+.opt {
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.on { background: var(--accent-muted); color: var(--accent); }
