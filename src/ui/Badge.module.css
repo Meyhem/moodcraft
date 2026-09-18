@@ -1,0 +1,11 @@
+.badge {
+  font-size: var(--fs-micro);
+  line-height: var(--lh-micro);
+  color: var(--text-tertiary);
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+  display: inline-block;
+}
+.thin { border-color: var(--severity-3); color: var(--severity-2); }

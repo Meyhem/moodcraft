@@ -1,0 +1,8 @@
+.title {
+  font-size: var(--fs-label);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin: 0 0 var(--sp-3);
+  font-weight: 700;
+}

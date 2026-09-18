@@ -1,0 +1,14 @@
+.btn {
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  border-radius: var(--radius-control);
+  padding: 12px 20px;
+  border: none;
+  cursor: pointer;
+}
+.primary { background: var(--accent); color: var(--on-accent); }
+.primary:hover { background: var(--accent-hover); }
+.secondary { background: var(--bg-overlay); color: var(--text-primary); border: 1px solid var(--border-default); }
+.ghost { background: transparent; color: var(--text-secondary); padding: 8px 0; }
+.ghost:hover { color: var(--text-primary); }
