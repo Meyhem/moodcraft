@@ -1,0 +1,136 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moodcraft — Date navigator</title>
+<style>
+
+:root{
+  --bg-base:#0E0F1A;
+  --bg-raised:#171927;
+  --bg-overlay:#1E2133;
+  --border-subtle:#2A2D42;
+  --border-default:#383C58;
+
+  --text-primary:#EDEBF7;
+  --text-secondary:#A5A3C4;
+  --text-tertiary:#6B6890;
+
+  --accent:#8B85F0;
+  --accent-hover:#A29CFF;
+  --accent-muted:#2C2A4D;
+
+  --severity-1:#D6CFE0;
+  --severity-2:#B9A9CC;
+  --severity-3:#9A84B3;
+  --severity-4:#7A5F94;
+  --severity-5:#5A3F70;
+
+  --event-good:#7FB8A3;
+  --event-good-muted:#1E322D;
+  --event-bad:#C98A8A;
+  --event-bad-muted:#332323;
+
+  --dose:#C4A059;
+  --dose-muted:#302A18;
+
+  --baseline-line:#4A4D68;
+
+  --radius-card:20px;
+  --radius-control:12px;
+  --radius-pill:999px;
+
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px;
+  --sp-6:24px; --sp-8:32px; --sp-12:48px; --sp-16:64px;
+
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --fs-display:28px; --lh-display:34px;
+  --fs-title:22px; --lh-title:28px;
+  --fs-subtitle:17px; --lh-subtitle:24px;
+  --fs-body:15px; --lh-body:22px;
+  --fs-label:13px; --lh-label:18px;
+  --fs-micro:11px; --lh-micro:16px;
+  --fs-statement:18px; --lh-statement:29px;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font);-webkit-font-smoothing:antialiased;}
+.page{padding:var(--sp-6);min-height:100vh;}
+.eyebrow{font-size:var(--fs-label);line-height:var(--lh-label);color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.08em;margin:0 0 var(--sp-2);font-weight:700;}
+h1{font-size:var(--fs-display);line-height:var(--lh-display);margin:0 0 var(--sp-2);font-weight:700;}
+h2{font-size:var(--fs-title);line-height:var(--lh-title);margin:0 0 var(--sp-4);font-weight:700;}
+h3{font-size:var(--fs-subtitle);line-height:var(--lh-subtitle);margin:0 0 var(--sp-3);font-weight:600;}
+p{font-size:var(--fs-body);line-height:var(--lh-body);color:var(--text-secondary);margin:0 0 var(--sp-4);}
+.card{background:var(--bg-raised);border:1px solid var(--border-subtle);border-radius:var(--radius-card);padding:var(--sp-6);}
+.row{display:flex;align-items:center;gap:var(--sp-3);}
+.row-between{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);}
+.stack{display:flex;flex-direction:column;gap:var(--sp-4);}
+.stack-sm{display:flex;flex-direction:column;gap:var(--sp-2);}
+.grid{display:grid;gap:var(--sp-4);}
+.swatch{border-radius:var(--radius-control);height:64px;border:1px solid var(--border-subtle);}
+.swatch-label{font-size:var(--fs-micro);line-height:var(--lh-micro);color:var(--text-tertiary);margin-top:var(--sp-2);font-variant-numeric:tabular-nums;}
+.btn{font-family:var(--font);font-size:var(--fs-body);font-weight:600;border-radius:var(--radius-control);padding:12px 20px;border:none;cursor:pointer;}
+.btn-primary{background:var(--accent);color:#14121F;}
+.btn-secondary{background:var(--bg-overlay);color:var(--text-primary);border:1px solid var(--border-default);}
+.btn-ghost{background:transparent;color:var(--text-secondary);}
+.pill{border-radius:var(--radius-pill);padding:6px 14px;font-size:var(--fs-label);font-weight:600;display:inline-flex;align-items:center;gap:6px;border:1px solid transparent;}
+.badge{font-size:var(--fs-micro);color:var(--text-tertiary);background:var(--bg-overlay);border:1px solid var(--border-subtle);border-radius:var(--radius-pill);padding:3px 10px;display:inline-block;}
+code, pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+pre{background:var(--bg-overlay);border:1px solid var(--border-subtle);border-radius:var(--radius-control);padding:var(--sp-4);font-size:12px;color:var(--text-secondary);overflow:auto;white-space:pre-wrap;}
+.section-title{font-size:var(--fs-label);letter-spacing:.04em;text-transform:uppercase;color:var(--text-tertiary);margin:0 0 var(--sp-3);font-weight:700;}
+hr.div{border:none;border-top:1px solid var(--border-subtle);margin:var(--sp-6) 0;}
+
+</style>
+</head>
+<body>
+
+<div class="page" style="max-width:640px;">
+  <p class="eyebrow">Component</p>
+  <h1 style="font-size:var(--fs-title);">Date navigator</h1>
+  <p>Any past date can be opened and edited freely, with no marking that an
+  entry was made late. The strip below distinguishes <em>recorded</em> from
+  <em>unknown</em> at a glance &mdash; unknown is a state, not a zero.</p>
+
+  <style>
+    .datehead{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-4);}
+    .datehead .arrow{width:36px;height:36px;border-radius:var(--radius-control);background:var(--bg-overlay);
+      border:1px solid var(--border-default);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;}
+    .strip{display:flex;gap:8px;}
+    .day{width:40px;height:52px;border-radius:10px;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:4px;font-size:12px;color:var(--text-tertiary);
+      border:1px dashed var(--border-subtle);}
+    .day .dot{width:6px;height:6px;border-radius:50%;}
+    .day.recorded{border:1px solid var(--border-default);background:var(--bg-overlay);color:var(--text-secondary);}
+    .day.recorded .dot{background:var(--severity-3);}
+    .day.today{border:1px solid var(--accent);color:var(--text-primary);}
+    .day.today .dot{background:var(--accent);}
+  </style>
+
+  <div class="card">
+    <div class="datehead">
+      <div class="arrow">&larr;</div>
+      <div class="stack-sm" style="align-items:center;text-align:center;">
+        <div style="font-size:var(--fs-subtitle);font-weight:600;">Tuesday, September 15</div>
+        <div class="swatch-label" style="margin:0;">tap to jump to a date</div>
+      </div>
+      <div class="arrow">&rarr;</div>
+    </div>
+    <div class="strip">
+      <div class="day recorded"><span>S</span><span class="dot"></span></div>
+      <div class="day"><span>M</span></div>
+      <div class="day recorded"><span>T</span><span class="dot"></span></div>
+      <div class="day recorded"><span>W</span><span class="dot"></span></div>
+      <div class="day"><span>T</span></div>
+      <div class="day"><span>F</span></div>
+      <div class="day today"><span>S</span><span class="dot"></span></div>
+    </div>
+    <p class="swatch-label" style="margin-top:var(--sp-3);">Dashed border, no dot = unknown. Solid + dot = recorded.</p>
+  </div>
+</div>
+
+</body>
+</html>
