@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { formatShort } from '../domain/date'
+import { HelpTooltip } from '../ui/HelpTooltip'
 import type { IntakeOutcome } from '../analysis'
 import type { IsoDate } from '../domain/types'
 import styles from './GapScatter.module.css'
@@ -76,6 +78,7 @@ interface Props {
 }
 
 export function GapScatter({ outcomes, hasBaseline, windowFrom, resetThresholdDays }: Props) {
+  const [activeDate, setActiveDate] = useState<IsoDate | null>(null)
   const points = buildPoints(outcomes, hasBaseline, windowFrom)
 
   if (points.length === 0) {
@@ -84,6 +87,7 @@ export function GapScatter({ outcomes, hasBaseline, windowFrom, resetThresholdDa
 
   const scale = buildScale(points, hasBaseline, resetThresholdDays)
   const yLabel = hasBaseline ? 'improvement' : 'score after dose'
+  const active = activeDate !== null ? points.find((p) => p.date === activeDate) ?? null : null
 
   const description = [
     `Gap in days since the previous dose plotted against ${yLabel}.`,
@@ -95,9 +99,43 @@ export function GapScatter({ outcomes, hasBaseline, windowFrom, resetThresholdDa
     ),
   ].join(' ')
 
+  const tooltipLines = active
+    ? [
+        formatShort(active.date),
+        `${active.gapDays} day${active.gapDays === 1 ? '' : 's'} since previous dose`,
+        hasBaseline ? `${active.value.toFixed(1)} improvement` : `${active.value.toFixed(1)} of 5`,
+        active.confounded ? 'on a day with an event' : null,
+      ].filter((line): line is string => line !== null)
+    : []
+  const tooltipWidth = 160
+  const tooltipHeight = 14 + tooltipLines.length * 14
+  const activeX = active ? scale.xFor(active.gapDays) : 0
+  const tooltipX = active
+    ? Math.min(Math.max(activeX - tooltipWidth / 2, PAD_X), W - PAD_X - tooltipWidth)
+    : 0
+
   return (
     <div className={styles.wrap}>
-      <svg className={styles.svg} viewBox={`0 0 ${W} ${H}`} role="img" aria-label={description}>
+      <div className={styles.help}>
+        <HelpTooltip label="About this chart">
+          Each dot is one dose. Its position left-to-right is how many days had passed
+          since the previous dose; its height is how well that dose seemed to work — either
+          the drop from your baseline score, or, if there's no baseline yet, the raw score
+          in the days right after. An open ring means a logged life event overlapped that
+          dose's response window, which could explain the mood change on its own instead of
+          the medication. Bigger dots are backed by more recorded days. The dashed line
+          marks the gap length your own data suggests sensitivity resets at. Faded dots are
+          outside the currently selected time window. Hover or tap any dot for its exact
+          numbers.
+        </HelpTooltip>
+      </div>
+      <svg
+        className={styles.svg}
+        viewBox={`0 0 ${W} ${H}`}
+        role="img"
+        aria-label={description}
+        onMouseLeave={() => setActiveDate(null)}
+      >
         {resetThresholdDays !== null && (
           <>
             <line
@@ -141,6 +179,45 @@ export function GapScatter({ outcomes, hasBaseline, windowFrom, resetThresholdDa
         <text x={PAD_X} y={H - 10} fill="var(--text-tertiary)" fontSize="11">
           days since previous dose
         </text>
+        <text x={PAD_X} y={PAD_TOP - 6} fill="var(--text-tertiary)" fontSize="11">
+          ↑ {yLabel}
+        </text>
+
+        {points.map((p) => (
+          <circle
+            key={p.date}
+            cx={scale.xFor(p.gapDays)}
+            cy={scale.yFor(p)}
+            r={Math.max(radiusFor(p.measuredDays) + 4, 10)}
+            fill="transparent"
+            onMouseEnter={() => setActiveDate(p.date)}
+            onClick={() => setActiveDate((prev) => (prev === p.date ? null : p.date))}
+          />
+        ))}
+
+        {active && (
+          <g>
+            <line
+              x1={activeX} x2={activeX} y1={4} y2={H - PAD_BOTTOM}
+              stroke="var(--border-default)" strokeDasharray="3 3"
+            />
+            <rect
+              x={tooltipX} y={4} width={tooltipWidth} height={tooltipHeight} rx="8"
+              fill="var(--bg-overlay)" stroke="var(--border-subtle)"
+            />
+            {tooltipLines.map((line, i) => (
+              <text
+                key={line}
+                x={tooltipX + 10}
+                y={4 + 15 + i * 14}
+                fill={i === 0 ? 'var(--text-primary)' : 'var(--text-secondary)'}
+                fontSize="11"
+              >
+                {line}
+              </text>
+            ))}
+          </g>
+        )}
       </svg>
 
       <div className={styles.legend}>
