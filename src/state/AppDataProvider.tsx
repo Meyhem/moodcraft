@@ -6,6 +6,7 @@ import { intakes as intakesRepo } from '../data/intakes'
 import { medications as medicationsRepo } from '../data/medications'
 import { exportFilename, restoreExport, serializeExport } from '../data/exportImport'
 import type { ImportSummary } from '../data/exportImport'
+import { generateDebugExport } from '../dev/generateDebugData'
 import { todayIso } from '../domain/date'
 import type { DayRecord, Intake, IsoDate, Medication } from '../domain/types'
 
@@ -23,6 +24,7 @@ interface AppData {
   setAnalysisTarget: (id: string) => Promise<void>
   exportData: () => Promise<{ json: string; filename: string }>
   importData: (json: string) => Promise<ImportSummary>
+  generateDebugData: () => Promise<ImportSummary>
   resetAll: () => Promise<void>
 }
 
@@ -67,6 +69,11 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     },
     async importData(json) {
       const summary = await restoreExport(json)
+      await reload()
+      return summary
+    },
+    async generateDebugData() {
+      const summary = await restoreExport(JSON.stringify(generateDebugExport()))
       await reload()
       return summary
     },

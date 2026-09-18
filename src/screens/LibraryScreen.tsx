@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { EmptyState } from '../components/EmptyState'
 import { ExportAction } from '../components/ExportAction'
+import { GenerateDebugDataAction } from '../components/GenerateDebugDataAction'
 import { ImportAction } from '../components/ImportAction'
 import { MedicationLibraryList } from '../components/MedicationLibraryList'
 import { ResetAction } from '../components/ResetAction'
@@ -54,6 +55,7 @@ export default function LibraryScreen() {
         />
         <ExportAction onExport={data.exportData} />
         <ImportAction onImport={data.importData} />
+        <GenerateDebugDataAction onGenerate={data.generateDebugData} />
         <ResetAction onReset={data.resetAll} />
       </div>
 
