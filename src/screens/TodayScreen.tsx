@@ -65,7 +65,7 @@ export default function TodayScreen() {
     [data.dayRecords],
   )
 
-  if (data.loading) return <p>Loading…</p>
+  if (data.loading) return <p role="status">Loading…</p>
 
   return (
     <div className={styles.screen}>

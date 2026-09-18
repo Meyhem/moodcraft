@@ -20,7 +20,7 @@ export default function TrendsScreen() {
   const analysis = useAnalysis(window)
   const today = todayIso()
 
-  if (data.loading) return <p>Loading…</p>
+  if (data.loading) return <p role="status">Loading…</p>
 
   const from =
     window === 'recent'

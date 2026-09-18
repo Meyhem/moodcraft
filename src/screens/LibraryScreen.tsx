@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { EmptyState } from '../components/EmptyState'
 import { ExportAction } from '../components/ExportAction'
 import { MedicationLibraryList } from '../components/MedicationLibraryList'
 import { Card } from '../ui/Card'
@@ -27,7 +28,7 @@ export default function LibraryScreen() {
     return first
   }, [data.intakes])
 
-  if (data.loading) return <p>Loading…</p>
+  if (data.loading) return <p role="status">Loading…</p>
 
   const selected = data.medications.find((m) => m.id === data.analysisMedicationId)
 
@@ -35,6 +36,12 @@ export default function LibraryScreen() {
     <div className={styles.screen}>
       <div className={styles.listColumn}>
         <h1 className={styles.heading}>Library</h1>
+        {data.medications.length === 0 && (
+          <EmptyState
+            title="No medications yet"
+            note="Add the one you want to look at — nothing is tracked until you do"
+          />
+        )}
         <MedicationLibraryList
           medications={data.medications}
           intakeCounts={intakeCounts}
