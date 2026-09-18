@@ -1,0 +1,22 @@
+.wrap { position: relative; }
+.trigger { composes: field from './Field.module.css'; cursor: pointer; }
+.list {
+  list-style: none;
+  margin: var(--sp-2) 0 0;
+  padding: var(--sp-3);
+  background: var(--bg-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-radius: var(--radius-control);
+  background: transparent; border: none; width: 100%; cursor: pointer;
+  color: var(--text-primary); font-size: var(--fs-body); text-align: left;
+}
+.row[aria-selected='true'], .row:hover { background: var(--accent-muted); }
+.meta { font-size: var(--fs-micro); color: var(--text-tertiary); }
+.add { color: var(--accent); font-weight: 700; }

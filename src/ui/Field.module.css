@@ -1,0 +1,12 @@
+.field {
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-control);
+  padding: 12px 16px;
+  width: 100%;
+  text-align: left;
+}
+.label { font-size: var(--fs-label); color: var(--text-tertiary); margin-bottom: 4px; display: block; }
+.value { font-size: var(--fs-subtitle); color: var(--text-primary); }
+.input { background: transparent; border: none; padding: 0; width: 100%; font-size: var(--fs-subtitle); color: var(--text-primary); }
+.input:focus { outline: none; }
