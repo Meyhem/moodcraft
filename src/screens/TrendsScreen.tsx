@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { DoseDecayChart } from '../components/DoseDecayChart'
 import { GapScatter } from '../components/GapScatter'
-import { PatternStatementCard } from '../components/PatternStatementCard'
 import { TrendChart } from '../components/TrendChart'
 import { SectionTitle } from '../ui/SectionTitle'
 import { Toggle } from '../ui/Toggle'
@@ -34,27 +33,18 @@ export default function TrendsScreen() {
 
   return (
     <div className={styles.screen}>
-      <div className={styles.chartColumn}>
-        <h1 className={styles.heading}>Trends &amp; Patterns</h1>
-        <Toggle ariaLabel="Time window" options={WINDOWS} value={window} onChange={setWindow} />
-        <TrendChart records={records} intakes={intakes} baseline={analysis.baseline} from={from} to={today} />
-        <SectionTitle>Spacing vs. outcome</SectionTitle>
-        <GapScatter
-          outcomes={analysis.allOutcomes}
-          hasBaseline={analysis.baseline !== null}
-          windowFrom={from}
-          resetThresholdDays={analysis.resetThresholdDays}
-        />
-        <SectionTitle>Dose size vs. how long it lasted</SectionTitle>
-        <DoseDecayChart curves={analysis.decayCurves} />
-      </div>
-
-      <section className={styles.statements} aria-label="Patterns">
-        <SectionTitle>Patterns</SectionTitle>
-        {analysis.statements.map((statement) => (
-          <PatternStatementCard key={statement.id} statement={statement} />
-        ))}
-      </section>
+      <h1 className={styles.heading}>Trends</h1>
+      <Toggle ariaLabel="Time window" options={WINDOWS} value={window} onChange={setWindow} />
+      <TrendChart records={records} intakes={intakes} baseline={analysis.baseline} from={from} to={today} />
+      <SectionTitle>Spacing vs. outcome</SectionTitle>
+      <GapScatter
+        outcomes={analysis.allOutcomes}
+        hasBaseline={analysis.baseline !== null}
+        windowFrom={from}
+        resetThresholdDays={analysis.resetThresholdDays}
+      />
+      <SectionTitle>Dose size vs. how long it lasted</SectionTitle>
+      <DoseDecayChart curves={analysis.decayCurves} />
     </div>
   )
 }

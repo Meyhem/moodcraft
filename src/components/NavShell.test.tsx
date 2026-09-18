@@ -10,10 +10,10 @@ function renderAt(path: string) {
   )
 }
 
-test('exactly three destinations, in order', () => {
+test('exactly four destinations, in order', () => {
   renderAt('/today')
   const links = screen.getAllByRole('link')
-  expect(links.map((l) => l.textContent)).toEqual(['Today', 'Trends', 'Library'])
+  expect(links.map((l) => l.textContent)).toEqual(['Today', 'Trends', 'Patterns', 'Library'])
 })
 
 test('the current destination is marked for assistive tech, not only by colour', () => {
@@ -23,5 +23,5 @@ test('the current destination is marked for assistive tech, not only by colour',
 
 test('carries no badge, count or notification dot (R-20)', () => {
   renderAt('/today')
-  expect(screen.getByRole('navigation').textContent).toBe('TodayTrendsLibrary')
+  expect(screen.getByRole('navigation').textContent).toBe('TodayTrendsPatternsLibrary')
 })

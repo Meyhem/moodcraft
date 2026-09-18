@@ -5,6 +5,7 @@ import styles from './NavShell.module.css'
 const DESTINATIONS = [
   { to: '/today', label: 'Today' },
   { to: '/trends', label: 'Trends' },
+  { to: '/patterns', label: 'Patterns' },
   { to: '/library', label: 'Library' },
 ] as const
 

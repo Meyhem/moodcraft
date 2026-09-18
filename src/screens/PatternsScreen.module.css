@@ -1,0 +1,3 @@
+.screen { display: grid; gap: var(--sp-6); }
+.heading { font-size: var(--fs-title); line-height: var(--lh-title); margin: 0; }
+.statements { display: grid; gap: var(--sp-3); align-content: start; }

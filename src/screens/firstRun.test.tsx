@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import TodayScreen from './TodayScreen'
-import TrendsScreen from './TrendsScreen'
+import PatternsScreen from './PatternsScreen'
 import LibraryScreen from './LibraryScreen'
 import { AppDataProvider } from '../state/AppDataProvider'
 import { closeDb, deleteDb } from '../data/db'
@@ -18,8 +18,8 @@ test('an empty device shows a usable Today form, not an error', async () => {
   expect(screen.queryByRole('alert')).not.toBeInTheDocument()
 })
 
-test('an empty device shows plain statements on Trends', async () => {
-  renderScreen(<TrendsScreen />)
+test('an empty device shows plain statements on Patterns', async () => {
+  renderScreen(<PatternsScreen />)
   await waitFor(() => expect(screen.getByText('No doses have been recorded yet.')).toBeInTheDocument())
 })
 

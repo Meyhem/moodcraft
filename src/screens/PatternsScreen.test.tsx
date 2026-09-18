@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import TrendsScreen from './TrendsScreen'
+import PatternsScreen from './PatternsScreen'
 import { AppDataProvider } from '../state/AppDataProvider'
 import { closeDb, deleteDb } from '../data/db'
 import { dayRecords } from '../data/dayRecords'
@@ -23,7 +23,7 @@ async function seed() {
 }
 
 function renderScreen() {
-  return render(<AppDataProvider><TrendsScreen /></AppDataProvider>)
+  return render(<AppDataProvider><PatternsScreen /></AppDataProvider>)
 }
 
 test('offers both time windows with recent selected first (R-17)', async () => {
@@ -33,7 +33,7 @@ test('offers both time windows with recent selected first (R-17)', async () => {
   expect(screen.getByRole('radio', { name: 'Long-term' })).toBeInTheDocument()
 })
 
-test('switching to long-term keeps the long-term window selected', async () => {
+test('switching to long-term re-renders the statements from the wider window', async () => {
   await seed()
   renderScreen()
   await waitFor(() => screen.getByRole('radio', { name: 'Long-term' }))
@@ -41,8 +41,20 @@ test('switching to long-term keeps the long-term window selected', async () => {
   expect(screen.getByRole('radio', { name: 'Long-term' })).toBeChecked()
 })
 
-test('shows the score chart', async () => {
+test('shows at least one statement carrying a sample size', async () => {
   await seed()
   renderScreen()
-  await waitFor(() => expect(screen.getByRole('img', { name: /scores from/i })).toBeInTheDocument())
+  await waitFor(() => expect(screen.getAllByText(/based on \d+ intakes?/).length).toBeGreaterThan(0))
+})
+
+test('with no medication at all the screen states that plainly', async () => {
+  renderScreen()
+  await waitFor(() => expect(screen.getByText('No doses have been recorded yet.')).toBeInTheDocument())
+})
+
+test('no statement tells the person what to do (R-08)', async () => {
+  await seed()
+  renderScreen()
+  await waitFor(() => screen.getAllByText(/based on/))
+  expect(document.body.textContent).not.toMatch(/\b(should|recommend|advice|aim for|try to)\b/i)
 })
