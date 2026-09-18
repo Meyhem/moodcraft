@@ -36,6 +36,7 @@ export default function TrendsScreen() {
       <h1 className={styles.heading}>Trends</h1>
       <Toggle ariaLabel="Time window" options={WINDOWS} value={window} onChange={setWindow} />
       <TrendChart records={records} intakes={intakes} baseline={analysis.baseline} from={from} to={today} />
+      <hr className={styles.divider} />
       <SectionTitle>Spacing vs. outcome</SectionTitle>
       <GapScatter
         outcomes={analysis.allOutcomes}
@@ -43,6 +44,7 @@ export default function TrendsScreen() {
         windowFrom={from}
         resetThresholdDays={analysis.resetThresholdDays}
       />
+      <hr className={styles.divider} />
       <SectionTitle>Dose size vs. how long it lasted</SectionTitle>
       <DoseDecayChart curves={analysis.decayCurves} />
     </div>
