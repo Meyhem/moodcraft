@@ -1,0 +1,6 @@
+.statement {
+  font-size: var(--fs-statement);
+  line-height: var(--lh-statement);
+  color: var(--text-primary);
+  margin: 0 0 var(--sp-3);
+}
