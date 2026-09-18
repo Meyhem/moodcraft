@@ -3,6 +3,7 @@ import { EmptyState } from '../components/EmptyState'
 import { ExportAction } from '../components/ExportAction'
 import { ImportAction } from '../components/ImportAction'
 import { MedicationLibraryList } from '../components/MedicationLibraryList'
+import { ResetAction } from '../components/ResetAction'
 import { Card } from '../ui/Card'
 import { SectionTitle } from '../ui/SectionTitle'
 import { formatShort } from '../domain/date'
@@ -53,6 +54,7 @@ export default function LibraryScreen() {
         />
         <ExportAction onExport={data.exportData} />
         <ImportAction onImport={data.importData} />
+        <ResetAction onReset={data.resetAll} />
       </div>
 
       <aside className={styles.detail} aria-label="Selected medication">

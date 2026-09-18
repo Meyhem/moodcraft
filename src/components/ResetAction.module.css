@@ -1,0 +1,5 @@
+.row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.title { font-size: var(--fs-body); color: var(--text-primary); }
+.note { font-size: var(--fs-micro); line-height: var(--lh-micro); color: var(--text-tertiary); }
+.confirmRow { display: flex; align-items: center; gap: var(--sp-2); }
+.danger { color: var(--event-bad); border-color: var(--event-bad); }

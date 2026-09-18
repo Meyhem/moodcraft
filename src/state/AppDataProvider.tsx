@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { dayRecords as dayRecordsRepo } from '../data/dayRecords'
+import { deleteDb } from '../data/db'
 import { intakes as intakesRepo } from '../data/intakes'
 import { medications as medicationsRepo } from '../data/medications'
 import { exportFilename, restoreExport, serializeExport } from '../data/exportImport'
@@ -22,6 +23,7 @@ interface AppData {
   setAnalysisTarget: (id: string) => Promise<void>
   exportData: () => Promise<{ json: string; filename: string }>
   importData: (json: string) => Promise<ImportSummary>
+  resetAll: () => Promise<void>
 }
 
 const Context = createContext<AppData | null>(null)
@@ -67,6 +69,10 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       const summary = await restoreExport(json)
       await reload()
       return summary
+    },
+    async resetAll() {
+      await deleteDb()
+      await reload()
     },
   }), [loading, dayRecords, intakes, medications, analysisMedicationId, reload])
 
