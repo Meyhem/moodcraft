@@ -23,7 +23,7 @@ use the tokens in `src/styles/tokens.css` — never raw hex values in a `.module
 ## Commands
 
 ```bash
-npm run dev         # start Vite dev server at http://localhost:5173
+npm run dev         # start Vite dev server at http://localhost:5173/moodcraft/ (/ redirects there)
 npm test             # run the full test suite once (vitest run)
 npm run test:watch   # run tests in watch mode
 npm run typecheck    # tsc -b (project references — a bare `tsc --noEmit` at the root checks nothing, root tsconfig.json has "files": [])
@@ -35,6 +35,18 @@ Run a single test file: `npx vitest run src/analysis/threshold.test.ts`
 Run a single test by name: `npx vitest run -t "test name substring"`
 
 There is no separate lint script.
+
+## Deployment
+
+`.github/workflows/deploy.yml` builds and publishes to GitHub Pages
+(https://meyhem.github.io/moodcraft/) on every push to `main`. It runs `npm test` before
+`npm run build`, so a failing test blocks the deploy. Two consequences of living under a
+repo subpath: `vite.config.ts` sets `base: '/moodcraft/'` (applied in dev and preview too,
+so all three modes agree) and `main.tsx` passes `import.meta.env.BASE_URL` as the
+`BrowserRouter` basename. Pages has no SPA rewrite rule, so the workflow copies
+`index.html` to `404.html` — a deep link like `/moodcraft/trends` is served that copy and
+the router resolves it client-side. Nothing about the deploy changes the privacy model: the
+build is static files only and all data stays in the visitor's own IndexedDB.
 
 ## Workflow
 
