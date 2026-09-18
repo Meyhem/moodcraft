@@ -3,7 +3,8 @@ import type { ReactNode } from 'react'
 import { dayRecords as dayRecordsRepo } from '../data/dayRecords'
 import { intakes as intakesRepo } from '../data/intakes'
 import { medications as medicationsRepo } from '../data/medications'
-import { exportFilename, serializeExport } from '../data/exportImport'
+import { exportFilename, restoreExport, serializeExport } from '../data/exportImport'
+import type { ImportSummary } from '../data/exportImport'
 import { todayIso } from '../domain/date'
 import type { DayRecord, Intake, IsoDate, Medication } from '../domain/types'
 
@@ -20,6 +21,7 @@ interface AppData {
   addMedication: (name: string) => Promise<Medication>
   setAnalysisTarget: (id: string) => Promise<void>
   exportData: () => Promise<{ json: string; filename: string }>
+  importData: (json: string) => Promise<ImportSummary>
 }
 
 const Context = createContext<AppData | null>(null)
@@ -60,6 +62,11 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     async setAnalysisTarget(id) { await medicationsRepo.setAnalysisTarget(id); await reload() },
     async exportData() {
       return { json: await serializeExport(), filename: exportFilename(todayIso()) }
+    },
+    async importData(json) {
+      const summary = await restoreExport(json)
+      await reload()
+      return summary
     },
   }), [loading, dayRecords, intakes, medications, analysisMedicationId, reload])
 

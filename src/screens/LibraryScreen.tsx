@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { EmptyState } from '../components/EmptyState'
 import { ExportAction } from '../components/ExportAction'
+import { ImportAction } from '../components/ImportAction'
 import { MedicationLibraryList } from '../components/MedicationLibraryList'
 import { Card } from '../ui/Card'
 import { SectionTitle } from '../ui/SectionTitle'
@@ -51,6 +52,7 @@ export default function LibraryScreen() {
           onAdd={(name) => void data.addMedication(name)}
         />
         <ExportAction onExport={data.exportData} />
+        <ImportAction onImport={data.importData} />
       </div>
 
       <aside className={styles.detail} aria-label="Selected medication">

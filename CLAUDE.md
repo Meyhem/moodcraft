@@ -103,8 +103,10 @@ before changing this code:
 append-only** — never edit a shipped migration; add a new one and bump what
 `SCHEMA_VERSION` resolves to (the last entry's `version`). `dayRecords.ts`, `intakes.ts`,
 `medications.ts` are thin repositories over these stores; `exportImport.ts` builds/restores
-the manual JSON export (there is no import UI wired up yet — the function exists and is
-tested, but no screen calls it).
+the manual JSON export. `restoreExport` **merges** — a day or dose whose key is also in the
+file is replaced by the file's, everything else on the device is left alone — and it reads
+and validates the whole file before writing anything, so a malformed record writes nothing
+at all. Both directions are reachable from the Library screen (`ExportAction`/`ImportAction`).
 
 There is no network code anywhere in the app by design — `src/guards.test.ts` scans every
 source file for `fetch`/`XMLHttpRequest`/`WebSocket`/URLs and fails the build if any

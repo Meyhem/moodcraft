@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Moodcraft — Export action</title>
+<title>Moodcraft — Export &amp; import action</title>
 <style>
 
 :root{
@@ -90,16 +90,53 @@ hr.div{border:none;border-top:1px solid var(--border-subtle);margin:var(--sp-6) 
 
 <div class="page" style="max-width:560px;">
   <p class="eyebrow">Component</p>
-  <h1 style="font-size:var(--fs-title);">Export action</h1>
+  <h1 style="font-size:var(--fs-title);">Export &amp; import action</h1>
   <p>Data lives on the device only. Export is a plain, manual, unceremonious
-  action &mdash; a file the person controls, not a share or sync flow.</p>
+  action &mdash; a file the person controls, not a share or sync flow. Import is its
+  mirror: a file the person picked, merged into what is already here, which says
+  afterwards exactly what landed rather than just &ldquo;done&rdquo;.</p>
 
-  <div class="card row-between">
-    <div>
-      <div style="font-size:var(--fs-body);color:var(--text-primary);">Export data</div>
-      <div class="swatch-label">Saves a JSON file to your device</div>
+  <div class="stack">
+    <div class="card row-between">
+      <div>
+        <div style="font-size:var(--fs-body);color:var(--text-primary);">Export data</div>
+        <div class="swatch-label">Saves a JSON file to your device</div>
+      </div>
+      <button class="btn btn-secondary">Export</button>
     </div>
-    <button class="btn btn-secondary">Export</button>
+
+    <div class="card row-between">
+      <div>
+        <div style="font-size:var(--fs-body);color:var(--text-primary);">Import data</div>
+        <div class="swatch-label">Merges a file you exported before &mdash; days and doses
+        already on this device are replaced by the file&rsquo;s</div>
+      </div>
+      <button class="btn btn-secondary">Import</button>
+    </div>
+
+    <p class="section-title" style="margin:var(--sp-4) 0 0;">After a file is chosen</p>
+
+    <div class="card row-between">
+      <div>
+        <div style="font-size:var(--fs-body);color:var(--text-primary);">Import data</div>
+        <div class="swatch-label">Merges a file you exported before &mdash; days and doses
+        already on this device are replaced by the file&rsquo;s</div>
+        <div style="font-size:var(--fs-micro);line-height:var(--lh-micro);color:var(--text-secondary);margin-top:var(--sp-2);">Added
+        1 medication, 42 days and 12 doses from the file.</div>
+      </div>
+      <button class="btn btn-secondary">Import</button>
+    </div>
+
+    <div class="card row-between">
+      <div>
+        <div style="font-size:var(--fs-body);color:var(--text-primary);">Import data</div>
+        <div class="swatch-label">Merges a file you exported before &mdash; days and doses
+        already on this device are replaced by the file&rsquo;s</div>
+        <div style="font-size:var(--fs-micro);line-height:var(--lh-micro);color:var(--event-bad);margin-top:var(--sp-2);">This
+        file is not a Moodcraft export.</div>
+      </div>
+      <button class="btn btn-secondary">Import</button>
+    </div>
   </div>
 </div>
 

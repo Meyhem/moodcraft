@@ -2,10 +2,10 @@ import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import LibraryScreen from './LibraryScreen'
 import { AppDataProvider } from '../state/AppDataProvider'
-import { closeDb, deleteDb } from '../data/db'
+import { closeDb, deleteDb, SCHEMA_VERSION } from '../data/db'
 import { intakes } from '../data/intakes'
 import { medications } from '../data/medications'
-import { makeIntake } from '../test/factories'
+import { makeDayRecord, makeIntake, makeMedication } from '../test/factories'
 
 afterEach(async () => { closeDb(); await deleteDb() })
 
@@ -59,4 +59,38 @@ test('a medication with no measured baseline says only spacing can be analysed (
   await waitFor(() =>
     expect(screen.getByText(/only the spacing between doses/)).toBeInTheDocument(),
   )
+})
+
+test('importing a file writes it to the device and the screen catches up (R-19)', async () => {
+  const exported = JSON.stringify({
+    format: 'moodcraft-export',
+    schemaVersion: SCHEMA_VERSION,
+    medications: [makeMedication('Medication A', 'm1')],
+    dayRecords: [makeDayRecord('2026-06-02')],
+    intakes: [makeIntake('2026-06-02', 150, 'm1')],
+    analysisMedicationId: 'm1',
+  })
+
+  renderScreen()
+  await waitFor(() => expect(screen.getByLabelText('Import')).toBeInTheDocument())
+  await userEvent.upload(
+    screen.getByLabelText('Import'),
+    new File([exported], 'moodcraft-2026-09-18.json', { type: 'application/json' }),
+  )
+
+  expect(await screen.findByText('Added 1 medication, 1 day and 1 dose from the file.')).toBeInTheDocument()
+  expect(await medications.all()).toHaveLength(1)
+  await waitFor(() => expect(within(screen.getByRole('list')).getByText('Medication A')).toBeInTheDocument())
+})
+
+test('a file that is not an export is refused and nothing is written', async () => {
+  renderScreen()
+  await waitFor(() => expect(screen.getByLabelText('Import')).toBeInTheDocument())
+  await userEvent.upload(
+    screen.getByLabelText('Import'),
+    new File(['<!doctype html>'], 'page.html', { type: 'application/json' }),
+  )
+
+  expect(await screen.findByRole('alert')).toHaveTextContent('This is not a valid JSON file.')
+  expect(await medications.all()).toHaveLength(0)
 })
