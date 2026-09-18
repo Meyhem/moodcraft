@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { GapScatter } from '../components/GapScatter'
 import { PatternStatementCard } from '../components/PatternStatementCard'
 import { TrendChart } from '../components/TrendChart'
 import { SectionTitle } from '../ui/SectionTitle'
@@ -36,6 +37,13 @@ export default function TrendsScreen() {
         <h1 className={styles.heading}>Trends &amp; Patterns</h1>
         <Toggle ariaLabel="Time window" options={WINDOWS} value={window} onChange={setWindow} />
         <TrendChart records={records} intakes={intakes} baseline={analysis.baseline} from={from} to={today} />
+        <SectionTitle>Spacing vs. outcome</SectionTitle>
+        <GapScatter
+          outcomes={analysis.allOutcomes}
+          hasBaseline={analysis.baseline !== null}
+          windowFrom={from}
+          resetThresholdDays={analysis.resetThresholdDays}
+        />
       </div>
 
       <section className={styles.statements} aria-label="Patterns">

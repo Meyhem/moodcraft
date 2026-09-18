@@ -44,6 +44,8 @@ export interface AnalysisResult {
   /** true when there is no measured pre-intake baseline: spacing only (R-10) */
   spacingOnly: boolean
   outcomes: IntakeOutcome[]
+  /** every outcome ever computed, ignoring the recent/long-term window (for charts that show full history) */
+  allOutcomes: IntakeOutcome[]
   resetThresholdDays: number | null
   statements: Statement[]
 }

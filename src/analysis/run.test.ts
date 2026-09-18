@@ -32,6 +32,19 @@ test('the recent window sees only the last 30 days of intakes but keeps the full
   expect(result.baseline?.dayCount).toBe(3)
 })
 
+test('allOutcomes ignores the window and always contains every intake', () => {
+  const result = runAnalysis(
+    {
+      medicationId: 'm1',
+      dayRecords: [...baselineDays, makeDayRecord('2026-06-10', { score: 2 }), makeDayRecord('2026-09-10', { score: 2 })],
+      intakes: [makeIntake('2026-06-10', 150), makeIntake('2026-09-10', 150)],
+      today: '2026-09-18',
+    },
+    'recent',
+  )
+  expect(result.allOutcomes.map((o) => o.date)).toEqual(['2026-06-10', '2026-09-10'])
+})
+
 test('with no baseline the result is spacing-only (R-10)', () => {
   const result = runAnalysis(
     {

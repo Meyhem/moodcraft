@@ -26,6 +26,7 @@ export function runAnalysis(input: AnalysisInput, window: WindowKey): AnalysisRe
     baseline,
     spacingOnly: baseline === null,
     outcomes,
+    allOutcomes: all,
     resetThresholdDays: threshold?.days ?? null,
     statements: buildStatements({
       outcomes,
