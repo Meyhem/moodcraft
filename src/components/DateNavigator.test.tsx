@@ -13,6 +13,14 @@ test('header shows the month and year of the visible week, not a specific date',
   expect(screen.getByRole('heading', { name: 'September 2026' })).toBeInTheDocument()
 })
 
+test('header spells out both months when the visible week crosses a month boundary', async () => {
+  render(<DateNavigator {...props} onChange={() => {}} />)
+  // Mon 09-14 -> Mon 08-31, whose week (Mon 08-31 - Sun 09-06) crosses August/September.
+  await userEvent.click(screen.getByRole('button', { name: 'Previous week' }))
+  await userEvent.click(screen.getByRole('button', { name: 'Previous week' }))
+  expect(screen.getByRole('heading', { name: 'August - September 2026' })).toBeInTheDocument()
+})
+
 test('the visible week is fixed Monday–Sunday and does not reflow when a day in it is selected', () => {
   const { rerender } = render(<DateNavigator {...props} onChange={() => {}} />)
   // Sunday the 20th is visible even though it's after the selected date — Mon-Sun grid, not a sliding window.

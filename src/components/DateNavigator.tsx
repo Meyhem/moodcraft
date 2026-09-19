@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { addDays, dayOfMonth, formatLong, monthYear, startOfWeek, weekdayShort } from '../domain/date'
+import { addDays, dayOfMonth, formatLong, startOfWeek, weekRangeLabel, weekdayShort } from '../domain/date'
 import type { IsoDate } from '../domain/types'
 import styles from './DateNavigator.module.css'
 
@@ -28,7 +28,7 @@ export function DateNavigator({ date, today, recordedDates, onChange }: Props) {
     <div>
       <div className={styles.head}>
         <button type="button" className={styles.arrow} aria-label="Previous week" onClick={() => setWeekStart(addDays(weekStart, -7))}>←</button>
-        <h1 className={styles.title}>{monthYear(weekStart)}</h1>
+        <h1 className={styles.title}>{weekRangeLabel(weekStart)}</h1>
         <button
           type="button"
           className={styles.arrow}

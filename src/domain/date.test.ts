@@ -1,4 +1,4 @@
-import { addDays, daysBetween, rangeInclusive, toIso, weekdayInitial, formatLong, weekdayShort, monthYear, dayOfMonth, startOfWeek } from './date'
+import { addDays, daysBetween, rangeInclusive, toIso, weekdayInitial, formatLong, weekdayShort, dayOfMonth, startOfWeek, weekRangeLabel } from './date'
 
 test('addDays crosses month and year boundaries', () => {
   expect(addDays('2026-01-31', 1)).toBe('2026-02-01')
@@ -33,7 +33,6 @@ test('formatting matches the design system', () => {
   expect(formatLong('2026-09-15')).toBe('Tuesday, September 15')
   expect(weekdayInitial('2026-09-15')).toBe('T')
   expect(weekdayShort('2026-09-15')).toBe('Tue')
-  expect(monthYear('2026-09-15')).toBe('September 2026')
   expect(dayOfMonth('2026-09-05')).toBe(5)
 })
 
@@ -42,4 +41,10 @@ test('startOfWeek returns the Monday of the containing week', () => {
   expect(startOfWeek('2026-09-16')).toBe('2026-09-14') // Wednesday
   expect(startOfWeek('2026-09-20')).toBe('2026-09-14') // Sunday, end of week
   expect(startOfWeek('2026-09-21')).toBe('2026-09-21') // next Monday
+})
+
+test('weekRangeLabel names the week by its Monday–Sunday span', () => {
+  expect(weekRangeLabel('2026-09-14')).toBe('September 2026') // wholly within one month
+  expect(weekRangeLabel('2026-08-31')).toBe('August - September 2026') // crosses a month boundary
+  expect(weekRangeLabel('2026-12-28')).toBe('December 2026 - January 2027') // crosses a year boundary
 })

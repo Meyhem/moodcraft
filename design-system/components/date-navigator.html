@@ -138,6 +138,43 @@ hr.div{border:none;border-top:1px solid var(--border-subtle);margin:var(--sp-6) 
     reached yet, can't be selected. Arrows step a full week; the right arrow
     disables once the visible week reaches today.</p>
   </div>
+
+  <p style="margin-top:var(--sp-6);">When the visible week crosses a month (or year) boundary, the header names
+  both: <code>Month1 - Month2 Year</code>, or <code>Month1 Year1 - Month2 Year2</code> if the year changes too.</p>
+
+  <div class="card">
+    <div class="datehead">
+      <div class="arrow">&larr;</div>
+      <div class="month">August - September 2026</div>
+      <div class="arrow">&rarr;</div>
+    </div>
+    <div class="strip">
+      <div class="day recorded"><span class="weekday">Mon</span><span class="daynum">31</span><span class="dot"></span></div>
+      <div class="day"><span class="weekday">Tue</span><span class="daynum">1</span></div>
+      <div class="day recorded selected"><span class="weekday">Wed</span><span class="daynum">2</span><span class="dot"></span></div>
+      <div class="day"><span class="weekday">Thu</span><span class="daynum">3</span></div>
+      <div class="day"><span class="weekday">Fri</span><span class="daynum">4</span></div>
+      <div class="day"><span class="weekday">Sat</span><span class="daynum">5</span></div>
+      <div class="day"><span class="weekday">Sun</span><span class="daynum">6</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:var(--sp-4);">
+    <div class="datehead">
+      <div class="arrow">&larr;</div>
+      <div class="month">December 2026 - January 2027</div>
+      <div class="arrow">&rarr;</div>
+    </div>
+    <div class="strip">
+      <div class="day"><span class="weekday">Mon</span><span class="daynum">28</span></div>
+      <div class="day"><span class="weekday">Tue</span><span class="daynum">29</span></div>
+      <div class="day"><span class="weekday">Wed</span><span class="daynum">30</span></div>
+      <div class="day"><span class="weekday">Thu</span><span class="daynum">31</span></div>
+      <div class="day"><span class="weekday">Fri</span><span class="daynum">1</span></div>
+      <div class="day"><span class="weekday">Sat</span><span class="daynum">2</span></div>
+      <div class="day"><span class="weekday">Sun</span><span class="daynum">3</span></div>
+    </div>
+  </div>
 </div>
 
 </body>

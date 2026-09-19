@@ -65,14 +65,10 @@ export function weekdayInitial(s: IsoDate): string {
 }
 
 const WEEKDAY_SHORT = new Intl.DateTimeFormat('en-US', { weekday: 'short' })
-const MONTH_YEAR = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' })
+const MONTH_ONLY = new Intl.DateTimeFormat('en-US', { month: 'long' })
 
 export function weekdayShort(s: IsoDate): string {
   return WEEKDAY_SHORT.format(fromIso(s))
-}
-
-export function monthYear(s: IsoDate): string {
-  return MONTH_YEAR.format(fromIso(s))
 }
 
 export function dayOfMonth(s: IsoDate): number {
@@ -84,4 +80,22 @@ export function startOfWeek(s: IsoDate): IsoDate {
   const dow = fromIso(s).getDay() // 0=Sun..6=Sat
   const sinceMonday = (dow + 6) % 7
   return addDays(s, -sinceMonday)
+}
+
+/**
+ * Header label for the Monday-Sunday week starting at `weekStart`: "September 2026",
+ * or "August - September 2026" / "December 2026 - January 2027" when the week
+ * crosses a month or year boundary.
+ */
+export function weekRangeLabel(weekStart: IsoDate): string {
+  const start = fromIso(weekStart)
+  const end = fromIso(addDays(weekStart, 6))
+  const startMonth = MONTH_ONLY.format(start)
+  const endMonth = MONTH_ONLY.format(end)
+  const startYear = start.getFullYear()
+  const endYear = end.getFullYear()
+
+  if (startYear !== endYear) return `${startMonth} ${startYear} - ${endMonth} ${endYear}`
+  if (startMonth !== endMonth) return `${startMonth} - ${endMonth} ${startYear}`
+  return `${startMonth} ${startYear}`
 }
