@@ -19,10 +19,10 @@ function renderScreen() {
   )
 }
 
-test('renders all 13 items in spec order', async () => {
+test('renders all 11 items in spec order', async () => {
   renderScreen()
   await waitFor(() => expect(screen.getByText('Tiredness')).toBeInTheDocument())
-  expect(screen.getAllByRole('radiogroup')).toHaveLength(13)
+  expect(screen.getAllByRole('radiogroup')).toHaveLength(11)
   for (const item of ITEMS) {
     expect(screen.getByRole('radiogroup', { name: item.label })).toBeInTheDocument()
   }
@@ -33,16 +33,16 @@ test('a day with no record says so, rather than showing zeros', async () => {
   await waitFor(() => expect(screen.getByText('No record for this day')).toBeInTheDocument())
 })
 
-test('progress is stated plainly and nothing is written until all 13 are scored (R-03)', async () => {
+test('progress is stated plainly and nothing is written until all 11 are scored (R-03)', async () => {
   renderScreen()
   await waitFor(() => screen.getByText('Tiredness'))
   const row = screen.getByRole('radiogroup', { name: 'Tiredness' })
   await userEvent.click(within(row).getByRole('radio', { name: '3' }))
-  expect(screen.getByText('1 of 13 scored — nothing is saved until all 13 are')).toBeInTheDocument()
+  expect(screen.getByText('1 of 11 scored — nothing is saved until all 11 are')).toBeInTheDocument()
   expect(await dayRecords.all()).toHaveLength(0)
 })
 
-test('scoring all 13 writes the day record', async () => {
+test('scoring all 11 writes the day record', async () => {
   renderScreen()
   await waitFor(() => screen.getByText('Tiredness'))
   for (const item of ITEMS) {
@@ -102,5 +102,5 @@ test('recording a dose does not discard partially entered scores', async () => {
 
   const after = screen.getByRole('radiogroup', { name: 'Tiredness' })
   expect(within(after).getByRole('radio', { name: '3' })).toBeChecked()
-  expect(screen.getByText('1 of 13 scored — nothing is saved until all 13 are')).toBeInTheDocument()
+  expect(screen.getByText('1 of 11 scored — nothing is saved until all 11 are')).toBeInTheDocument()
 })

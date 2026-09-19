@@ -85,8 +85,8 @@ test('importing merges into what is already on the device, the file winning on c
 
   const after = await dayRecords.all()
   expect(after.map((r) => r.date)).toEqual(['2026-09-14', '2026-09-15', '2026-09-16'])
-  expect(after[0]!.scores.sadness).toBe(2)
-  expect(after[1]!.scores.sadness).toBe(5)
+  expect(after[0]!.scores.tiredness).toBe(2)
+  expect(after[1]!.scores.tiredness).toBe(5)
 })
 
 test('a restore reports how many records it wrote', async () => {

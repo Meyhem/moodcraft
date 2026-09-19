@@ -40,7 +40,7 @@ else ever sees the data unless the user exports a file and hands it over themsel
 | Term | Meaning in this business | Notes / synonyms rejected |
 |---|---|---|
 | **Day record** | One day's worth of mood scores | Not "entry" or "check-in" — it is always scoped to exactly one calendar day |
-| **Item** | One of the 13 things scored 1–5 in a day record | Not "question", not "symptom" |
+| **Item** | One of the 11 things scored 1–5 in a day record | Not "question", not "symptom" |
 | **Score** | An item's value for one day, 1–5, where **5 is always the worst** | Not "rating" |
 | **Medication** | Anything ingested that might move mood — prescribed drugs, supplements, caffeine, alcohol, nicotine | Deliberately broad. "Substance" was considered and rejected; the user calls it all medication |
 | **Intake** | A day on which medication was taken, recorded as a total milligram amount | Not "dose event"; intake is per-day, never per-hour |
@@ -58,34 +58,32 @@ else ever sees the data unless the user exports a file and hands it over themsel
 
 ### 4.1 Day record
 What one day looked like. Identified by its **calendar date** — there is at most one day
-record per date, ever. It holds a 1–5 score for each of the 13 items. It may be created on
+record per date, ever. It holds a 1–5 score for each of the 11 items. It may be created on
 the day itself or entered later; the app does not distinguish. Days with no record are
 **unknown**, not zero and not "fine".
 
 A day record is explicitly **not** a diary. There is no narrative, no free text of record.
 
 ### 4.2 Item
-One of the 13 things scored. Every item is worded so that **5 is the worst**, including
+One of the 11 things scored. Every item is worded so that **5 is the worst**, including
 items that are naturally positive — "desire for company" is worded as *lack of desire for
 company* rather than reverse-scored, so the user never mentally flips a scale.
 
-The 13 items:
+The 11 items:
 
 1. Tiredness
 2. Rumination
-3. Sadness
-4. Loneliness
-5. Social withdrawal — how much I avoided people
-6. Lack of desire for company
-7. Anhedonia — nothing felt enjoyable
-8. Anxiety
-9. Irritability
-10. Difficulty concentrating
-11. Lack of motivation
-12. Hopelessness
-13. Poor sleep
+3. Loneliness
+4. Lack of desire for company
+5. Anhedonia — nothing felt enjoyable
+6. Anxiety
+7. Irritability
+8. Difficulty concentrating
+9. Lack of motivation
+10. Hopelessness
+11. Poor sleep
 
-All 13 are scored on every day record. The list is **not frozen** — items may be added or
+All 11 are scored on every day record. The list is **not frozen** — items may be added or
 changed later, and the resulting holes in historic charts are accepted as the price of
 being able to change it.
 
@@ -174,7 +172,7 @@ reconstructed.
 
 - **R-01** *(hard)* — A day record covers exactly one calendar day. There is at most one per date.
 - **R-02** *(hard)* — Every item is scored 1–5, and 5 always means worst, for every item without exception.
-- **R-03** *(hard)* — All 13 items are answered on every day record.
+- **R-03** *(hard)* — All 11 items are answered on every day record.
 - **R-04** *(hard)* — Intake is recorded as a single total milligram amount for the day. Time of day is never recorded.
 - **R-05** *(hard)* — Day records may be created or edited for any past date without restriction, and carry no marking that they were entered late.
 
@@ -209,7 +207,7 @@ reconstructed.
 
 ### 8.1 Recording a day
 The user opens the app and records a day — usually today, sometimes a past date. They score
-all 13 items. If they took medication that day they enter the day's total in milligrams.
+all 11 items. If they took medication that day they enter the day's total in milligrams.
 Nothing is triggered, nothing is submitted for approval, nothing locks. The record simply
 exists and can be changed later.
 
@@ -264,8 +262,8 @@ recent-days view and the long-term view are available.
 - **Q-02** — Does "track only one medication" mean one forever, or one at a time with the
   ability to switch and keep the old one's history? Section 4.3 assumes the latter.
   *Ask the user.*
-- **Q-03** — How does the app combine 13 items into "improvement"? A simple mean across all
-  13, a weighted subset, or per-item tracking? The user said elsewhere that specific items
+- **Q-03** — How does the app combine 11 items into "improvement"? A simple mean across all
+  11, a weighted subset, or per-item tracking? The user said elsewhere that specific items
   may respond differently, which argues against a single number, but this was never settled.
 - **Q-04** — Does a dose taken during a medication's baseline period ever happen — i.e. can
   the user have taken it before they started recording? If so, the baseline is contaminated
@@ -289,8 +287,10 @@ Asserted in this document but **not confirmed** by the user:
 - **A-05** — Assumed there is no concept of a medication being "supposed to be" taken daily,
   so the app never reports a missed dose. Follows from R-15; the user called this question
   irrelevant once single-medication tracking was decided.
-- **A-06** — Assumed the specific 13 items listed in 4.2 are final. The user said "add all
-  you recommend" to a proposed list rather than authoring it themselves.
+- **A-06** — Assumed the specific 13 items originally listed in 4.2 were final. The user
+  said "add all you recommend" to a proposed list rather than authoring it themselves; this
+  assumption did not hold — "Sadness" and "Social withdrawal" were later removed, leaving
+  the 11 items now in 4.2, per R-03's own allowance that the list is not frozen.
 
 ---
 

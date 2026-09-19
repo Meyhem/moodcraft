@@ -29,7 +29,7 @@ test('with no intakes yet, every recorded day is baseline', () => {
 })
 
 test('baseline keeps per-item means so items can be read separately (Q-04)', () => {
-  const records = [makeDayRecord('2026-06-01', { scores: { tiredness: 5, sadness: 3 } })]
+  const records = [makeDayRecord('2026-06-01', { scores: { tiredness: 5, rumination: 3 } })]
   const baseline = computeBaseline(records, [])
   expect(baseline!.perItem.tiredness).toBe(5)
 })

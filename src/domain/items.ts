@@ -3,9 +3,7 @@ import type { Item, ItemId } from './types'
 export const ITEMS: readonly Item[] = [
   { id: 'tiredness', label: 'Tiredness' },
   { id: 'rumination', label: 'Rumination' },
-  { id: 'sadness', label: 'Sadness' },
   { id: 'loneliness', label: 'Loneliness' },
-  { id: 'social-withdrawal', label: 'Social withdrawal — how much I avoided people' },
   { id: 'no-desire-company', label: 'Lack of desire for company' },
   { id: 'anhedonia', label: 'Anhedonia — nothing felt enjoyable' },
   { id: 'anxiety', label: 'Anxiety' },
