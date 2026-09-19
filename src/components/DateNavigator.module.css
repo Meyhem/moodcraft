@@ -16,7 +16,9 @@
 }
 .weekday { font-size: var(--fs-micro); text-transform: uppercase; letter-spacing: .04em; }
 .daynum { font-size: var(--fs-body); font-weight: 600; font-variant-numeric: tabular-nums; }
-.dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 1px; }
+.dots { display: flex; align-items: center; gap: 3px; margin-top: 1px; }
+.dot { width: 6px; height: 6px; border-radius: 50%; }
+.doseDot { width: 6px; height: 6px; border-radius: 50%; background: var(--dose); }
 .recorded { border: 1px solid var(--border-default); background: var(--bg-overlay); color: var(--text-secondary); }
 .recorded .dot { background: var(--severity-3); }
 .selected { border: 1px solid var(--accent); background: var(--accent-muted); color: var(--text-primary); }

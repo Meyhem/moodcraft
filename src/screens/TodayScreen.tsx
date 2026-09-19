@@ -62,13 +62,17 @@ export default function TodayScreen() {
     () => new Set(data.dayRecords.map((r) => r.date)),
     [data.dayRecords],
   )
+  const dosedDates = useMemo(
+    () => new Set(data.intakes.map((i) => i.date)),
+    [data.intakes],
+  )
 
   if (data.loading) return <p role="status">Loading…</p>
 
   return (
     <div className={styles.screen}>
       <div className={styles.form}>
-        <DateNavigator date={date} today={today} recordedDates={recordedDates} onChange={setDate} />
+        <DateNavigator date={date} today={today} recordedDates={recordedDates} dosedDates={dosedDates} onChange={setDate} />
 
         {record === undefined && !complete && <UnknownDayState />}
 

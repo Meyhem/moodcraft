@@ -7,10 +7,11 @@ interface Props {
   date: IsoDate
   today: IsoDate
   recordedDates: Set<string>
+  dosedDates?: Set<string>
   onChange: (date: IsoDate) => void
 }
 
-export function DateNavigator({ date, today, recordedDates, onChange }: Props) {
+export function DateNavigator({ date, today, recordedDates, dosedDates, onChange }: Props) {
   const [weekStart, setWeekStart] = useState<IsoDate>(() => startOfWeek(date))
   const prevDate = useRef(date)
 
@@ -40,12 +41,13 @@ export function DateNavigator({ date, today, recordedDates, onChange }: Props) {
       <div className={styles.strip}>
         {strip.map((day) => {
           const recorded = recordedDates.has(day)
+          const dosed = dosedDates?.has(day) ?? false
           const future = day > today
           return (
             <button
               key={day}
               type="button"
-              aria-label={`${formatLong(day)} — ${recorded ? 'recorded' : 'no record'}`}
+              aria-label={`${formatLong(day)} — ${recorded ? 'recorded' : 'no record'}${dosed ? ', dose taken' : ''}`}
               aria-current={day === date ? 'date' : undefined}
               disabled={future}
               className={[
@@ -59,7 +61,12 @@ export function DateNavigator({ date, today, recordedDates, onChange }: Props) {
             >
               <span className={styles.weekday} aria-hidden="true">{weekdayShort(day)}</span>
               <span className={styles.daynum} aria-hidden="true">{dayOfMonth(day)}</span>
-              {recorded && <span className={styles.dot} aria-hidden="true" />}
+              {(recorded || dosed) && (
+                <span className={styles.dots} aria-hidden="true">
+                  {recorded && <span className={styles.dot} />}
+                  {dosed && <span className={styles.doseDot} />}
+                </span>
+              )}
             </button>
           )
         })}

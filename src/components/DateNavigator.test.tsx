@@ -69,3 +69,19 @@ test('unknown days are labelled unknown, never zero or missed (R-06)', () => {
   expect(screen.getByRole('button', { name: 'Wednesday, September 16 — no record' })).toBeInTheDocument()
   expect(screen.getByRole('button', { name: 'Monday, September 14 — recorded' })).toBeInTheDocument()
 })
+
+test('days with a medication intake are marked dosed, independently of whether they were recorded', () => {
+  render(
+    <DateNavigator
+      {...props}
+      dosedDates={new Set(['2026-09-14', '2026-09-16'])}
+      onChange={() => {}}
+    />,
+  )
+  // recorded and dosed together
+  expect(screen.getByRole('button', { name: 'Monday, September 14 — recorded, dose taken' })).toBeInTheDocument()
+  // dosed but not recorded
+  expect(screen.getByRole('button', { name: 'Wednesday, September 16 — no record, dose taken' })).toBeInTheDocument()
+  // recorded but not dosed keeps its original label
+  expect(screen.getByRole('button', { name: 'Tuesday, September 15 — recorded' })).toBeInTheDocument()
+})
