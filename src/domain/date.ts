@@ -63,3 +63,25 @@ export function formatShort(s: IsoDate): string {
 export function weekdayInitial(s: IsoDate): string {
   return new Intl.DateTimeFormat('en-US', { weekday: 'narrow' }).format(fromIso(s))
 }
+
+const WEEKDAY_SHORT = new Intl.DateTimeFormat('en-US', { weekday: 'short' })
+const MONTH_YEAR = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' })
+
+export function weekdayShort(s: IsoDate): string {
+  return WEEKDAY_SHORT.format(fromIso(s))
+}
+
+export function monthYear(s: IsoDate): string {
+  return MONTH_YEAR.format(fromIso(s))
+}
+
+export function dayOfMonth(s: IsoDate): number {
+  return fromIso(s).getDate()
+}
+
+/** Monday of the week containing `s`. */
+export function startOfWeek(s: IsoDate): IsoDate {
+  const dow = fromIso(s).getDay() // 0=Sun..6=Sat
+  const sinceMonday = (dow + 6) % 7
+  return addDays(s, -sinceMonday)
+}

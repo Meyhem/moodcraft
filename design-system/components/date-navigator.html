@@ -91,44 +91,52 @@ hr.div{border:none;border-top:1px solid var(--border-subtle);margin:var(--sp-6) 
 <div class="page" style="max-width:640px;">
   <p class="eyebrow">Component</p>
   <h1 style="font-size:var(--fs-title);">Date navigator</h1>
-  <p>Any past date can be opened and edited freely, with no marking that an
-  entry was made late. The strip below distinguishes <em>recorded</em> from
-  <em>unknown</em> at a glance &mdash; unknown is a state, not a zero.</p>
+  <p>The visible week is always Monday&ndash;Sunday and never reflows when you
+  tap a day &mdash; only the arrows change which week is shown. Any past date
+  can be opened and edited freely, with no marking that an entry was made
+  late. The strip distinguishes <em>recorded</em> from <em>unknown</em> at a
+  glance &mdash; unknown is a state, not a zero.</p>
 
   <style>
     .datehead{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-4);}
     .datehead .arrow{width:36px;height:36px;border-radius:var(--radius-control);background:var(--bg-overlay);
       border:1px solid var(--border-default);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;}
-    .strip{display:flex;gap:8px;}
-    .day{width:40px;height:52px;border-radius:10px;display:flex;flex-direction:column;
-      align-items:center;justify-content:center;gap:4px;font-size:12px;color:var(--text-tertiary);
-      border:1px dashed var(--border-subtle);}
-    .day .dot{width:6px;height:6px;border-radius:50%;}
+    .datehead .arrow.disabled{opacity:.4;}
+    .datehead .month{font-size:var(--fs-subtitle);font-weight:600;}
+    .strip{display:flex;gap:8px;justify-content:space-between;}
+    .day{width:44px;height:56px;border-radius:10px;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:4px;
+      border:1px dashed var(--border-subtle);color:var(--text-tertiary);}
+    .day .weekday{font-size:11px;text-transform:uppercase;letter-spacing:.04em;}
+    .day .daynum{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;}
+    .day .dot{width:6px;height:6px;border-radius:50%;margin-top:1px;}
     .day.recorded{border:1px solid var(--border-default);background:var(--bg-overlay);color:var(--text-secondary);}
     .day.recorded .dot{background:var(--severity-3);}
-    .day.today{border:1px solid var(--accent);color:var(--text-primary);}
-    .day.today .dot{background:var(--accent);}
+    .day.selected{border:1px solid var(--accent);background:var(--accent-muted);color:var(--text-primary);}
+    .day.selected .dot{background:var(--accent);}
+    .day.today{outline:2px solid var(--accent);outline-offset:2px;}
+    .day.future{opacity:.4;}
   </style>
 
   <div class="card">
     <div class="datehead">
       <div class="arrow">&larr;</div>
-      <div class="stack-sm" style="align-items:center;text-align:center;">
-        <div style="font-size:var(--fs-subtitle);font-weight:600;">Tuesday, September 15</div>
-        <div class="swatch-label" style="margin:0;">tap to jump to a date</div>
-      </div>
-      <div class="arrow">&rarr;</div>
+      <div class="month">September 2026</div>
+      <div class="arrow disabled">&rarr;</div>
     </div>
     <div class="strip">
-      <div class="day recorded"><span>S</span><span class="dot"></span></div>
-      <div class="day"><span>M</span></div>
-      <div class="day recorded"><span>T</span><span class="dot"></span></div>
-      <div class="day recorded"><span>W</span><span class="dot"></span></div>
-      <div class="day"><span>T</span></div>
-      <div class="day"><span>F</span></div>
-      <div class="day today"><span>S</span><span class="dot"></span></div>
+      <div class="day recorded selected"><span class="weekday">Mon</span><span class="daynum">14</span><span class="dot"></span></div>
+      <div class="day recorded"><span class="weekday">Tue</span><span class="daynum">15</span><span class="dot"></span></div>
+      <div class="day today"><span class="weekday">Wed</span><span class="daynum">16</span></div>
+      <div class="day future"><span class="weekday">Thu</span><span class="daynum">17</span></div>
+      <div class="day future"><span class="weekday">Fri</span><span class="daynum">18</span></div>
+      <div class="day future"><span class="weekday">Sat</span><span class="daynum">19</span></div>
+      <div class="day future"><span class="weekday">Sun</span><span class="daynum">20</span></div>
     </div>
-    <p class="swatch-label" style="margin-top:var(--sp-3);">Dashed border, no dot = unknown. Solid + dot = recorded.</p>
+    <p class="swatch-label" style="margin-top:var(--sp-3);">Dashed border, no dot = unknown. Solid + dot = recorded.
+    Filled accent = the day you're viewing. Accent ring = today. Dimmed = not
+    reached yet, can't be selected. Arrows step a full week; the right arrow
+    disables once the visible week reaches today.</p>
   </div>
 </div>
 

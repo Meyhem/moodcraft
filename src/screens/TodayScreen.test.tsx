@@ -72,11 +72,21 @@ test('the dose is a single total in milligrams, with no time input anywhere (R-0
   expect(screen.queryByLabelText(/time/i)).not.toBeInTheDocument()
 })
 
-test('a past date can be opened and recorded', async () => {
+test('a past date can be opened and recorded (R-05)', async () => {
   renderScreen()
-  await waitFor(() => screen.getByRole('button', { name: 'Previous day' }))
-  await userEvent.click(screen.getByRole('button', { name: 'Previous day' }))
-  expect(screen.getByRole('heading', { level: 1 })).not.toHaveTextContent('')
+  await waitFor(() => screen.getByRole('button', { name: 'Previous week' }))
+  await userEvent.click(screen.getByRole('button', { name: 'Previous week' }))
+  // Every day pill in the now-visible previous week is in the past, so all are selectable.
+  await userEvent.click(screen.getAllByRole('button', { name: /—/ })[0]!)
+
+  await waitFor(() => screen.getByText('Tiredness'))
+  for (const item of ITEMS) {
+    const row = screen.getByRole('radiogroup', { name: item.label })
+    await userEvent.click(within(row).getByRole('radio', { name: '3' }))
+  }
+  await waitFor(async () => expect(await dayRecords.all()).toHaveLength(1))
+  const saved = (await dayRecords.all())[0]!
+  expect(saved.date).not.toBe(todayIso())
 })
 
 test('recording a dose does not discard partially entered scores', async () => {

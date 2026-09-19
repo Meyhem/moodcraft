@@ -9,13 +9,17 @@
 .title { font-size: var(--fs-subtitle); line-height: var(--lh-subtitle); font-weight: 600; margin: 0; text-align: center; }
 .strip { display: flex; gap: 8px; justify-content: space-between; }
 .day {
-  width: 40px; height: 52px; border-radius: 10px;
+  width: 44px; height: 56px; border-radius: 10px;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-  font-size: var(--fs-label); color: var(--text-tertiary);
+  color: var(--text-tertiary);
   border: 1px dashed var(--border-subtle); background: transparent; cursor: pointer;
 }
-.dot { width: 6px; height: 6px; border-radius: 50%; }
+.weekday { font-size: var(--fs-micro); text-transform: uppercase; letter-spacing: .04em; }
+.daynum { font-size: var(--fs-body); font-weight: 600; font-variant-numeric: tabular-nums; }
+.dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 1px; }
 .recorded { border: 1px solid var(--border-default); background: var(--bg-overlay); color: var(--text-secondary); }
 .recorded .dot { background: var(--severity-3); }
-.today { border-color: var(--accent); color: var(--text-primary); }
-.today .dot { background: var(--accent); }
+.selected { border: 1px solid var(--accent); background: var(--accent-muted); color: var(--text-primary); }
+.selected .dot { background: var(--accent); }
+.today { outline: 2px solid var(--accent); outline-offset: 2px; }
+.future { opacity: .4; cursor: default; }
