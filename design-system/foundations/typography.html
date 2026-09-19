@@ -45,7 +45,7 @@
   --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px;
   --sp-6:24px; --sp-8:32px; --sp-12:48px; --sp-16:64px;
 
-  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   --fs-display:28px; --lh-display:34px;
   --fs-title:22px; --lh-title:28px;
@@ -91,10 +91,12 @@ hr.div{border:none;border-top:1px solid var(--border-subtle);margin:var(--sp-6) 
 <div class="page" style="max-width:760px;">
   <p class="eyebrow">Foundations</p>
   <h1>Typography</h1>
-  <p>One humanist sans throughout (system stack shown here &mdash; swap the
-  <code>--font</code> token for a brand face such as Manrope). Consistency
-  matters more than variety: scores, milligrams and gaps are all numbers
-  read at a glance, so numerals stay tabular and legible at every size.</p>
+  <p>One humanist sans throughout &mdash; Manrope, self-hosted via
+  <code>@fontsource/manrope</code> so the app stays offline, with the system
+  stack as fallback (shown here since this reference file doesn't bundle the
+  font). Consistency matters more than variety: scores, milligrams and gaps
+  are all numbers read at a glance, so numerals stay tabular and legible at
+  every size.</p>
 
   <div class="stack" style="margin-top:var(--sp-8);">
     <div><div style="font-size:var(--fs-display);line-height:var(--lh-display);font-weight:700;">Display 28/34</div><p class="swatch-label">Rare &mdash; e.g. today's date on the home screen</p></div>
