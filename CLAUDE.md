@@ -50,10 +50,12 @@ build is static files only and all data stays in the visitor's own IndexedDB.
 
 ## Workflow
 
-After completing a feature or fix (implementation + passing tests), commit the change and
-push to `origin/main` without waiting to be asked — this is standing authorization for
-routine commits and pushes on this repo. Still stop and confirm before any destructive or
-history-rewriting git operation (force-push, reset --hard, amending a pushed commit, etc.).
+Work directly on `main` — do not create feature branches for routine work. After completing
+a feature or fix (implementation + passing tests), commit the change and push straight to
+`origin main` automatically, without waiting to be asked — this is standing authorization
+for routine commits and pushes on this repo. Still stop and confirm before any destructive
+or history-rewriting git operation (force-push, reset --hard, amending a pushed commit,
+etc.).
 
 ## Architecture
 
